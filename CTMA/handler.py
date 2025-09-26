@@ -74,15 +74,27 @@ def viewTodosInfoed():
         print(t)
 
 def selectTodo():
-    print(
-        f"Select a task number:\n"
-        f"Cancel: 0"
-         )
-    viewTodos()
-    selection = int(input(""))
-    print()
-    return(selection)
-    # TODO input validation
+    """
+    Prompts user to select a task number. Validates input.
+    Returns the valid selection.
+    """
+    while True: # loops until a valid input is returned
+        print(
+            f"Select a task number:\n"
+            f"Cancel: 0"
+            )
+        viewTodos()
+        selection = input("Task number: ")
+        if selection.isdigit():
+            selection = int(selection)
+            if 0 <= selection <= len(todoList):
+                print()
+                return selection
+            else:
+                print("Invalid task number.\n")
+        else:
+            print("Invalid input. Please enter a number.\n")
+
 
 def selectEditChoice(curTodo):
     editChoice = int(input( 
