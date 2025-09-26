@@ -150,10 +150,17 @@ def createTodo():
     """
     Takes user input to create a new todo object, stores at end of todoList
     """
-    label = input("Enter task label: ")
-    dueDate = input("Enter due date: ") # TODO could ensure consistent formatting
+    # validate label input
+    while True:
+        label = input("Enter task label: ").strip()
+        if label:
+            break
+        else:
+            print("Task label cannot be empty.\n")
 
-    # input validation for priority
+    dueDate = input("Enter due date: ").strip() # TODO could ensure consistent formatting
+
+    # validate priority input
     while True:
         priority = input("Enter priority:\n(1: None, 2: Low, 3: Medium, 4: High)\n")
         if priority in c.PRIORITYDICT:
@@ -162,7 +169,7 @@ def createTodo():
         else:
             print("Invalid priority choice.\n")
 
-    category = input("Enter task category: ")
+    category = input("Enter task category: ").strip()
     idNum = len(todoList) + 1
 
     todoList.append(todo.ToDo(label, dueDate, priority, category, idNum))
@@ -189,14 +196,13 @@ def editTodo(selection):
     }
     
     while True:
-        # TODO input validation here
         editChoice = selectEditChoice(curTodo)
         if (editChoice == 0):
             break
 
         prompt, editCall = editOptions.get(editChoice)
         if prompt:
-            newVal = input(prompt)
+            newVal = input(prompt).strip()
 
             if editChoice == 3:
                 if newVal not in c.PRIORITYDICT:
