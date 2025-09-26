@@ -1,4 +1,4 @@
-
+import constants as c
 
 class ToDo():
     def __init__(self, label, dueDate, priority, category, idNum):
@@ -23,8 +23,33 @@ class ToDo():
     def printLabel(self):
         print(f"Task {self.idNum}: {self.label}")
 
-    def delete():
-        pass
+    def editLabel(self, newVal):
+        self.label = newVal
+        print(f"Label saved as {newVal}\n")
 
-    def edit():
+    def editDueDate(self, newVal):
+        self.dueDate = newVal
+        print(f"Due Date saved as {newVal}\n")
+
+    def editPriority(self, newVal):
+        self.priority = c.PRIORITYDICT[newVal]
+        print(f"Priority set to {c.PRIORITYDICT[newVal]}\n")
+
+    def editCategory(self, newVal):
+        self.category = newVal
+        print(f"Category saved as {newVal}\n")
+
+    def toggleComplete(self, choice):
+        if (choice == 1):
+            self.complete = True
+            self.status = "Complete"
+            print(f"{self.label} marked as complete.\n")
+
+        if (choice == 2):
+            self.complete = False
+            self.status = "Ongoing"
+            print(f"{self.label} marked as ongoing.\n")
+        return
+
+    def delete():
         pass

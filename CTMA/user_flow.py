@@ -1,28 +1,31 @@
 import handler as h
 
 def startProgram():
-    choice = 0
+    choice = None
 
     print("Welcome to Collaborative ToDo Manager Application (CTMA)!")
     h.loadSave()
 
-    while (choice != 7):
+    while (choice != 0):
         choice = h.displayOptions()
+
+        if (choice == 0):
+            pass
 
         if (choice == 1):
             h.createTodo()
+
         if (choice == 2):
-            pass
+            h.editTodo(h.selectTodo())
+
         if (choice == 3):
             pass
+
         if (choice == 4):
-            pass
+            h.changeCompletion(h.selectTodo())
+
         if (choice == 5):
-            pass
-        if (choice == 6):
-            h.viewTodos()
-        if (choice == 7):
-            pass
+            h.decideView()
 
     h.saveData()
-    print("Thank you for using CTMA!")
+    print("\nThank you for using CTMA!")
