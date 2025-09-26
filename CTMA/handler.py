@@ -97,31 +97,54 @@ def selectTodo():
 
 
 def selectEditChoice(curTodo):
-    editChoice = int(input( 
-        f"What would you like to edit?\n"
-        f"0: Exit Editing\n"
-        f"1: Label - Current: {curTodo.label}\n"
-        f"2: Due Date - Current: {curTodo.dueDate}\n"
-        f"3: Priority - Current: {curTodo.priority}\n"
-        f"4: Category - Current: {curTodo.category}\n"
-        f"5: Completion - Current: {curTodo.status}\n"
-    ))
-    print()
-    return editChoice
+    """
+    Prompts user for an edit choice. Validates input.
+    Returns the valid selecion.
+    """
+    while True: # loop until valid input returns
+        try:
+            editChoice = int(input( 
+                f"What would you like to edit?\n"
+                f"0: Exit Editing\n"
+                f"1: Label - Current: {curTodo.label}\n"
+                f"2: Due Date - Current: {curTodo.dueDate}\n"
+                f"3: Priority - Current: {curTodo.priority}\n"
+                f"4: Category - Current: {curTodo.category}\n"
+                f"5: Completion - Current: {curTodo.status}\n"
+            ))
+            if 0 <= editChoice <= 5:
+                print()
+                return editChoice
+            else:
+                print("Invalid choice. Please enter a number between 0 and 5.\n")
+        except ValueError: # couldn't convert to int
+            print("Invalid input. Please enter a number.\n")
 
 def changeCompletion(selection):
     if (selection == 0):
         return
-    curTodo = todoList[selection - 1]
+    try:
+        curTodo = todoList[selection - 1]
+    except IndexError:
+        print("Error: Task not found with that number.")
+        return
 
-    choice = int(input(
-        f"Select {curTodo.label} completion status - Current: {curTodo.status}: \n"
-        f"0: Cancel\n"
-        f"1: Complete\n"
-        f"2: Ongoing\n"
-    ))
-    curTodo.toggleComplete(choice)
-    return
+    while True:
+        try:
+            choice = int(input(
+                f"Select {curTodo.label} completion status - Current: {curTodo.status}: \n"
+                f"0: Cancel\n"
+                f"1: Complete\n"
+                f"2: Ongoing\n"
+            ))
+
+            if choice in [0, 1, 2]:
+                curTodo.toggleComplete(choice)
+                return
+            else:
+                print("Invalid choice. Select 0, 1, or 2.\n")
+        except ValueError:
+            print("Invalid input. Enter a number.\n")
 
 def createTodo():
     """
@@ -129,7 +152,16 @@ def createTodo():
     """
     label = input("Enter task label: ")
     dueDate = input("Enter due date: ") # TODO could ensure consistent formatting
-    priority = c.PRIORITYDICT[input("Enter priority:\n(1: None, 2: Low, 3: Medium, 4: High)\n")] # TODO make it so it only accepts valid input
+
+    # input validation for priority
+    while True:
+        priority = input("Enter priority:\n(1: None, 2: Low, 3: Medium, 4: High)\n")
+        if priority in c.PRIORITYDICT:
+            priority = c.PRIORITYDICT[priority]
+            break
+        else:
+            print("Invalid priority choice.\n")
+
     category = input("Enter task category: ")
     idNum = len(todoList) + 1
 
@@ -165,6 +197,12 @@ def editTodo(selection):
         prompt, editCall = editOptions.get(editChoice)
         if prompt:
             newVal = input(prompt)
+
+            if editChoice == 3:
+                if newVal not in c.PRIORITYDICT:
+                    print("Invalid priority choice.\n")
+                    continue # restart loop
+
             editCall(newVal)
         else:
             editCall(None)
@@ -176,28 +214,47 @@ def editTodo(selection):
 # User Interaction #
 ####################
 def displayOptions():
-    choice = input(
-        f"Select an option:\n"
-        f"0: Exit CTMA\n"
-        f"1: Create a task\n"
-        f"2: Edit a task\n"
-        f"3: Delete a task\n"
-        f"4: Change a task's completion\n"
-        f"5: View tasks\n"
-        )
-    print()
-    return int(choice) # TODO type and bounds testing
+    """
+    Displays main menu options. Returns a valid integer choice.
+    """
+    while True:
+        try:
+            choice = int(input(
+                f"Select an option:\n"
+                f"0: Exit CTMA\n"
+                f"1: Create a task\n"
+                f"2: Edit a task\n"
+                f"3: Delete a task\n"
+                f"4: Change a task's completion\n"
+                f"5: View tasks\n"
+                ))
+
+            if 0 <= choice <= 5:
+                print()
+                return choice
+            else:
+                print("Invalid option.\n")
+        except ValueError:
+            print("Invalid input.\n")
 
 def decideView():
-    detail = int(input(
-        f"Select viewing option:\n"
-        f"0: Simple\n"
-        f"1: Detailed\n"
-    ))
-    print()
-    if (detail == 0):
-        viewTodos()
-    if (detail == 1):
-        viewTodosInfoed()
-    print()
-    return
+    while True:
+        try:
+            detail = int(input(
+                f"Select viewing option:\n"
+                f"0: Simple\n"
+                f"1: Detailed\n"
+            ))
+            print()
+            if (detail == 0):
+                viewTodos()
+                print()
+                return
+            if (detail == 1):
+                viewTodosInfoed()
+                print()
+                return
+            else:
+                print("Invalid option.\n")
+        except ValueError:
+            print("Invalid input.\n")
