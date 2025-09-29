@@ -50,6 +50,3 @@ class ToDo():
             self.status = "Ongoing"
             print(f"{self.label} marked as ongoing.\n")
         return
-
-    def delete():
-        pass

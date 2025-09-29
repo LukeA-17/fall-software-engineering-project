@@ -6,7 +6,6 @@ import todo as t
 
 # TODO add docstrings and comments
 
-# TODO test case for no json file?
 
 def test_loadsave(capfd, mock_save_data):
     mock_json = json.dumps(mock_save_data)
@@ -90,5 +89,34 @@ def test_invalid_selection(monkeypatch, capfd):
     out, _ = capfd.readouterr()
     assert "Invalid task number" in out
     assert result == 0
+
+def test_delete_todo(monkeypatch, capfd):
+    task1 = t.ToDo("Test Task 1", "1970-01-01", "None", "Test", 1)
+    task2 = t.ToDo("Test Task 2", "1970-01-01", "None", "Test", 2)
+    task3 = t.ToDo("Test Task 3", "1970-01-01", "None", "Test", 3)
+    h.todoList.extend([task1, task2, task3])
+
+    inputValues = ["2"]
+    monkeypatch.setattr("builtins.input", lambda _: inputValues.pop(0))
+
+    initialLength = len(h.todoList)
+
+    h.deleteTodo(h.selectTodo())
+    out, _ = capfd.readouterr()
+    # list length decreased
+    assert len(h.todoList) == initialLength - 1
+
+    # correct task deleted
+    assert "Task 2: Test Task 2 deleted successfully" in out
+
+    # remaining tasks correct
+    assert h.todoList[0].label == "Test Task 1"
+    assert h.todoList[1].label == "Test Task 3"
+
+    # remaining tasks re-indexed
+    assert h.todoList[0].idNum == 1
+    assert h.todoList[1].idNum == 2
+
+
 
 # TODO tests for editing

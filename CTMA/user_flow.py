@@ -19,13 +19,16 @@ def startProgram():
             h.editTodo(h.selectTodo())
 
         if (choice == 3):
-            pass
+            h.deleteTodo(h.selectTodo())
 
         if (choice == 4):
             h.changeCompletion(h.selectTodo())
 
         if (choice == 5):
             h.decideView()
+        
+        if (choice == 6):
+            h.search()
 
     h.saveData()
     print("\nThank you for using CTMA!")

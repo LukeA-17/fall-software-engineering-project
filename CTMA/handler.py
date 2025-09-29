@@ -58,8 +58,29 @@ def saveData():
         print("Tasks saved successfully.")
 
 def search():
-    # have like a filtering/sorting thing here for category TODO
-    pass
+    if not todoList:
+        print("No tasks available to search.\n")
+        return
+    
+    searchTerm = input("Enter search term: ")
+    if not searchTerm:
+        print("Search term cannot be empty.\n")
+        return
+    
+    results = [
+        t for t in todoList
+        if searchTerm in t.label.lower() or
+        searchTerm in t.category.lower() or
+        searchTerm in t.priority.lower()
+    ]
+
+    if results:
+        print("\n--- Search Results ---")
+        for t in results:
+            print(t)
+        print("--------------------- \n")
+    else:
+        print("No tasks matched your search criteria.\n")
 
 
 ####################
@@ -214,6 +235,20 @@ def editTodo(selection):
             editCall(None)
 
     return
+
+def deleteTodo(selection):
+    try:
+        # task num is 1 indexed
+        deletedTask = todoList.pop(selection - 1)
+        print(f"Task {selection}: {deletedTask.label} deleted successfully.\n")
+
+        # re-index tasks
+        for i, t in enumerate(todoList):
+            t.idNum = i + 1
+    except IndexError:
+        print("Error: Task not found with that number.\n")
+    except Exception as e:
+        print(f"An error occurred during deletion: {e}\n")
     
 
 ####################
@@ -233,9 +268,10 @@ def displayOptions():
                 f"3: Delete a task\n"
                 f"4: Change a task's completion\n"
                 f"5: View tasks\n"
+                f"6: Search tasks\n"
                 ))
 
-            if 0 <= choice <= 5:
+            if 0 <= choice <= 6:
                 print()
                 return choice
             else:
