@@ -6,6 +6,7 @@ All AI use is documented here, sorted by category.
 ### README:
 
 ### Design Document:
+- AI used to convert tables from .docx to markdown
 
 ### Milestone_1:
 - AI used to create a generic template
