@@ -20,8 +20,8 @@ def test_loadsave(capfd, mock_save_data):
     assert "2 tasks loaded successfully" in out
 
 def test_savedata(capfd):
-    h.todoList.append(t.ToDo("Test 1", "1970-01-01", "None", "Test", 1))
-    h.todoList.append(t.ToDo("Test 2", "1970-01-01", "None", "Test", 2))
+    h.todoList.append(t.ToDo("Test 1", "01/01/1970", "None", "Test", 1))
+    h.todoList.append(t.ToDo("Test 2", "01/01/1970", "None", "Test", 2))
 
     m = mock_open()
     with patch("builtins.open", m), patch("json.dump") as mock_dump:
@@ -31,13 +31,13 @@ def test_savedata(capfd):
     assert "Tasks saved successfully." in out
 
     expected_dict = {
-        0: {'label': 'Test 1', 'dueDate': '1970-01-01', 'priority': 'None', 'category': 'Test'},
-        1: {'label': 'Test 2', 'dueDate': '1970-01-01', 'priority': 'None', 'category': 'Test'}
+        0: {'label': 'Test 1', 'dueDate': '01/01/1970', 'priority': 'None', 'category': 'Test'},
+        1: {'label': 'Test 2', 'dueDate': '01/01/1970', 'priority': 'None', 'category': 'Test'}
     }
     assert mock_dump.call_args[0][0] == expected_dict
 
 def test_createtodo(monkeypatch):
-    input_values = ["Test Task", "1970-01-01", "3", "School"]
+    input_values = ["Test Task", "01/01/1970", "3", "School"]
     monkeypatch.setattr("builtins.input", lambda _: input_values.pop(0))
 
     h.createTodo()
@@ -45,7 +45,7 @@ def test_createtodo(monkeypatch):
     assert len(h.todoList) == 1
 
 def test_invalid_create(monkeypatch, capfd):
-    input_values = ["", "Valid Label", "1970-01-01", "1", "Category"]
+    input_values = ["", "Valid Label", "01/01/1970", "1", "Category"]
     monkeypatch.setattr("builtins.input", lambda _: input_values.pop(0))
 
     h.createTodo()
@@ -56,7 +56,7 @@ def test_invalid_create(monkeypatch, capfd):
     assert h.todoList[0].label == "Valid Label"
 
 def test_decideview_simple(monkeypatch, capfd):
-    h.todoList.append(t.ToDo("Test Task", "1970-01-01", "None", "Test", 1))
+    h.todoList.append(t.ToDo("Test Task", "01/01/1970", "None", "Test", 1))
     monkeypatch.setattr("builtins.input", lambda _: "0")
 
     h.decideView()
@@ -65,7 +65,7 @@ def test_decideview_simple(monkeypatch, capfd):
     assert "Category:" not in out
 
 def test_decideview_detailed(monkeypatch, capfd):
-    h.todoList.append(t.ToDo("Test Task", "1970-01-01", "None", "Test", 1))
+    h.todoList.append(t.ToDo("Test Task", "01/01/1970", "None", "Test", 1))
     monkeypatch.setattr("builtins.input", lambda _: "1")
 
     h.decideView()
@@ -74,14 +74,14 @@ def test_decideview_detailed(monkeypatch, capfd):
     assert "Category: Test" in out
 
 def test_valid_selection(monkeypatch):
-    h.todoList.append(t.ToDo("Test Task", "1970-01-01", "None", "Test", 1))
+    h.todoList.append(t.ToDo("Test Task", "01/01/1970", "None", "Test", 1))
     monkeypatch.setattr("builtins.input", lambda _: "1")
 
     result = h.selectTodo()
     assert result == 1
 
 def test_invalid_selection(monkeypatch, capfd):
-    h.todoList.append(t.ToDo("Test Task", "1970-01-01", "None", "Test", 1))
+    h.todoList.append(t.ToDo("Test Task", "01/01/1970", "None", "Test", 1))
     input_values = ["47", "0"]
     monkeypatch.setattr("builtins.input", lambda _: input_values.pop(0))
 
@@ -91,9 +91,9 @@ def test_invalid_selection(monkeypatch, capfd):
     assert result == 0
 
 def test_delete_todo(monkeypatch, capfd):
-    task1 = t.ToDo("Test Task 1", "1970-01-01", "None", "Test", 1)
-    task2 = t.ToDo("Test Task 2", "1970-01-01", "None", "Test", 2)
-    task3 = t.ToDo("Test Task 3", "1970-01-01", "None", "Test", 3)
+    task1 = t.ToDo("Test Task 1", "01/01/1970", "None", "Test", 1)
+    task2 = t.ToDo("Test Task 2", "01/01/1970", "None", "Test", 2)
+    task3 = t.ToDo("Test Task 3", "01/01/1970", "None", "Test", 3)
     h.todoList.extend([task1, task2, task3])
 
     inputValues = ["2"]

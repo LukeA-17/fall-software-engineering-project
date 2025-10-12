@@ -7,7 +7,7 @@ def test_todo_initialization():
     """
     Tests that attributes are correctly set for a new task.
     """
-    task = t.ToDo("Test Label", "1970-01-01", "Medium", "Dev", 99)
+    task = t.ToDo("Test Label", "01/01/1970", "Medium", "Dev", 99)
     assert task.label == "Test Label"
     assert task.priority == "Medium"
     assert task.idNum == 99
@@ -18,9 +18,9 @@ def test_todo_str_method():
     """
     Tests that Task object formats to string correctly.
     """
-    task = t.ToDo("Test Str", "1970-01-01", "Low", "Test", 1)
+    task = t.ToDo("Test Str", "01/01/1970", "Low", "Test", 1)
     expected_output = [
-        "Task 1: Test Str", "Category: Test", "Status: Ongoing", "Due: 1970-01-01", "Priority: Low"
+        "Task 1: Test Str", "Category: Test", "Status: Ongoing", "Due: 01/01/1970", "Priority: Low"
     ]
     task_str = str(task)
     for part in expected_output:
@@ -30,7 +30,7 @@ def test_todo_printlabel(capfd):
     """
     Tests that simple label format prints correctly.
     """
-    task = t.ToDo("Test Simple", "1970-01-01", "High", "Test", 5)
+    task = t.ToDo("Test Simple", "01/01/1970", "High", "Test", 5)
     task.printLabel()
     out, err = capfd.readouterr()
     assert out.strip() == "Task 5: Test Simple"
@@ -39,7 +39,7 @@ def test_todo_edit_label(capfd):
     """
     Tests that label is changed correctly with a confirmation message.
     """
-    task = t.ToDo("Old Label", "1970-01-01", "None", "Test", 1)
+    task = t.ToDo("Old Label", "01/01/1970", "None", "Test", 1)
     task.editLabel("New Task Name")
     out, err = capfd.readouterr()
     assert task.label == "New Task Name"
@@ -49,7 +49,7 @@ def test_todo_edit_priority(capfd):
     """
     Tests that priority is changed correctly with a confirmation message.
     """
-    task = t.ToDo("Test Task", "1970-01-01", "None", "Test", 1)
+    task = t.ToDo("Test Task", "01/01/1970", "None", "Test", 1)
     task.editPriority("2")
     out, err = capfd.readouterr()
     assert task.priority == "Low"
@@ -59,7 +59,7 @@ def test_toggle_complete(capfd):
     """
     Tests that tasks can be marked as complete with a confirmation message.
     """
-    task = t.ToDo("Test Task", "1970-01-01", "None", "Test", 1)
+    task = t.ToDo("Test Task", "01/01/1970", "None", "Test", 1)
     task.toggleComplete(1)
     out, err = capfd.readouterr()
     assert task.complete is True
@@ -71,7 +71,7 @@ def test_toggle_ongoing(capfd):
     Tests that tasks can be changed back to "Ongoing" after being completed
     with a confirmation message.
     """
-    task = t.ToDo("Test Task", "1970-01-01", "None", "Test", 1)
+    task = t.ToDo("Test Task", "01/01/1970", "None", "Test", 1)
     task.complete = True
     task.status = "Complete"
     task.toggleComplete(2)

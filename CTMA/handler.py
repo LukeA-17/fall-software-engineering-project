@@ -1,8 +1,7 @@
-# TODO maybe change all variable and method from todo to task
-
 import json
 import todo as todo
 import constants as c
+from datetime import date, datetime
 
 
 #####################
@@ -30,27 +29,35 @@ def loadSave():
     else:
         count = 0
         for item in data.values():
-            todoList.append(todo.ToDo(
+            new_task = todo.ToDo(
                 item["label"],
                 item["dueDate"],
                 item["priority"],
                 item["category"],
                 (len(todoList) + 1)
-            ))
+            )
+            if "complete" in item and item["complete"]:
+                new_task.toggleComplete(1)
+            
+            todoList.append(new_task)
             count += 1
         print(f"{count} tasks loaded successfully.\n")
 
+# TODO implement saving completion status as well
 def saveData():
     """
     Turns todoList into a dict, stores that dict into data.json
     """
     todoDict = {}
     for i, t in enumerate(todoList):
+        date_str = t.dueDate.strftime("%m/%d/%Y") if t.dueDate else ""
         todoDict[i] = {
             "label": t.label,
-            "dueDate": t.dueDate,
+            "dueDate": date_str,
             "priority": t.priority,
-            "category": t.category
+            "category": t.category,
+            "complete": t.complete,
+            "status": t.status
         }
 
     with open("data.json", "w") as f:
@@ -179,7 +186,17 @@ def createTodo():
         else:
             print("Task label cannot be empty.\n")
 
-    dueDate = input("Enter due date: ").strip() # TODO could ensure consistent formatting
+    # validate date input
+    while True:
+        dueDate = input("Enter due date (MM/DD/YYYY, or leave blank): ").strip()
+        if not dueDate:
+            break
+
+        try:
+            datetime.strptime(dueDate, "%m/%d/%Y")
+            break
+        except ValueError:
+            print("Invalid date format. Use MM/DD/YYYY or leave blank.\n")
 
     # validate priority input
     while True:
@@ -210,7 +227,7 @@ def editTodo(selection):
 
     editOptions = {
         1: ("Enter new label: ", lambda v: curTodo.editLabel(v)),
-        2: ("Enter new due date: ", lambda v: curTodo.editDueDate(v)),
+        2: ("Enter new due date (MM/DD/YYYY): ", lambda v: curTodo.editDueDate(v)),
         3: ("Enter new priority level:\n1: None\n2: Low\n3: Medium\n 4: High\n", lambda v: curTodo.editPriority(v)),
         4: ("Enter new category: ", lambda v: curTodo.editCategory(v)),
         5: (None, lambda _v: changeCompletion(selection))
@@ -221,7 +238,7 @@ def editTodo(selection):
         if (editChoice == 0):
             break
 
-        prompt, editCall = editOptions.get(editChoice)
+        prompt, editCall = editOptions.get(editChoice, (None, None))
         if prompt:
             newVal = input(prompt).strip()
 
@@ -250,6 +267,62 @@ def deleteTodo(selection):
     except Exception as e:
         print(f"An error occurred during deletion: {e}\n")
     
+
+#######################
+# GUI Support Methods #
+#######################
+def get_tasks_for_view(view_type="All", category=None, sort_key="Priority", reverse=False):
+    """Filters and sorts the todoList for display in the GUI task view
+
+    Args:
+        view_type: 'All', 'Due Today', or 'Completed'
+        category: Specific category name or None for all categories
+        sort_key: Attribute to sort by ('Priority', 'dueDate', 'label')
+        reverse: Boolean to reverse the sort order
+    
+    Returns:
+        A list of filtered and sorted ToDo objects
+    """
+    filtered_tasks = todoList
+
+    # convert strings in priority map to ints
+    PRIORITY_SORT_MAP = {v: int(k) for k, v in c.PRIORITYDICT.items()}
+
+    # Filter by view type
+    if view_type == "Completed":
+        filtered_tasks = [t for t in filtered_tasks if t.complete]
+    elif view_type == "Due Today":
+        today = date.today()
+        filtered_tasks = [t for t in filtered_tasks if t.dueDate and t.dueDate == today]
+    
+    # Filter by category
+    if category:
+        filtered_tasks = [t for t in filtered_tasks if t.category == category]
+    
+    # Sort
+    def get_priority_value(task):
+        return PRIORITY_SORT_MAP.get(task.priority, 0)
+    
+    sort_functions = {
+        "Priority": get_priority_value,
+        # None dates are set far in future to sort last
+        "dueDate": lambda t: t.dueDate if t.dueDate else date(9999, 1, 1),
+        "label": lambda t: t.label.lower()
+    }
+
+    key_func = sort_functions.get(sort_key, sort_functions["Priority"])
+
+    if sort_key == "Priority":
+        reverse = True
+    else:
+        reverse = reverse
+    
+    try:
+        sorted_tasks = sorted(filtered_tasks, key=key_func, reverse=reverse)
+        return sorted_tasks
+    except Exception as e:
+        print(f"Error during task sorting: {e}")
+        return filtered_tasks
 
 ####################
 # User Interaction #

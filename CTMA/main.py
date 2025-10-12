@@ -2,9 +2,11 @@ import json
 import todo as todo
 import handler as h
 import user_flow as flow
+import gui
 
 def main():
-    flow.startProgram()
+    gui.start_gui()
+    # flow.startProgram()
     
 
 if __name__ == "__main__":
