@@ -24,7 +24,7 @@ This is the point where you can validate your save data loaded succesfully.
 
 Upon starting the program, the following prompt appears:
 
-![CTMA Startup Menu](Documentation\Images\readme\startup.png)
+![CTMA Startup Menu](https://github.com/LukeA-17/fall-software-engineering-project/blob/main/Documentation/Images/readme/startup.png?raw=true)
 
 To start the task creation process, type 1 and then enter.
 
@@ -32,15 +32,15 @@ The program will then prompt you for each trait of the new task
 
 Enter your answers after the prompt. It should look something like this:
 
-![CTMA New Task](Documentation\Images\readme\new_task.png)
+![CTMA New Task](https://github.com/LukeA-17/fall-software-engineering-project/blob/main/Documentation/Images/readme/new_task.png?raw=true)
 
 You may view your tasks at any time by selecting 5 in the main menu, and then the desired view, like so:
 
-![CTMA Task View](Documentation\Images\readme\view_task.png)
+![CTMA Task View](https://github.com/LukeA-17/fall-software-engineering-project/blob/main/Documentation/Images/readme/view_task.png?raw=true)
 
 When you are done using the program, enter 0 into the main menu to save and close:
 
-![CTMA Closure](Documentation\Images\readme\exit_CTMA.png)
+![CTMA Closure](https://github.com/LukeA-17/fall-software-engineering-project/blob/main/Documentation/Images/readme/exit_CTMA.png?raw=true)
 
 
 ## Troubleshooting
