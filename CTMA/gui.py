@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
 import handler as h
 from datetime import date
 
@@ -85,7 +85,7 @@ class CTMAGUI:
         
         # add task button
         # NOTE placeholder command
-        ttk.Button(top_frame, text="Add Task", command=lambda: print("Opening Create Task Page"), width=12).pack(side="right", anchor="ne")
+        ttk.Button(top_frame, text="Add Task", command=self.load_create_task_page, width=12).pack(side="right", anchor="ne")
         return top_frame
     
     def create_bottom_bar(self, parent):
@@ -289,7 +289,7 @@ class CTMAGUI:
 
         # edit button
         # NOTE placeholder command
-        ttk.Button(row_frame, text="...", width=3, command=lambda: print(f"Edit Task {task.idNum}")).pack(side="right", anchor="e")
+        ttk.Button(row_frame, text="...", width=3, command=lambda t=task: self.load_edit_task_page(t)).pack(side="right", anchor="e")
 
     
     def create_view_button(self, parent, text, row, col, command):
@@ -308,6 +308,190 @@ class CTMAGUI:
         button_frame.grid(row=row, column=col, padx=5, pady=5, sticky="nsew")
 
         ttk.Button(button_frame, text=text, command=command, style="HomePage.TButton").pack(fill="both", expand=True, padx=10, pady=10)
+
+    def load_create_task_page(self):
+        """
+        Creates and displays the form for creating a new task
+        """
+        self.clear_frame()
+        self.create_top_bar(self.main_frame, page_title="Create Task")
+
+        ttk.Button(self.main_frame, text="<< Home", command=self.load_home_page, width=10).pack(side="top", anchor="w", pady=(0, 10), padx=5)
+
+        form_frame = ttk.Frame(self.main_frame, padding="20")
+        form_frame.pack(pady=20, padx=50, fill="x")
+
+        # form fields setup
+        self.current_task_vars = {
+            "label": tk.StringVar(),
+            "dueDate": tk.StringVar(),
+            "priority": tk.StringVar(value=h.c.PRIORITYDICT["1"]), # default to None
+            "category": tk.StringVar()
+        }
+
+        self._create_task_form_widgets(form_frame, is_new_task=True)
+
+        # save/discard buttons
+        button_frame = ttk.Frame(self.main_frame)
+        button_frame.pack(fill="x", pady=20)
+        button_frame.grid_columnconfigure((0, 1), weight=1, uniform="button_group")
+
+        ttk.Button(button_frame, text="Save", command=self._submit_new_task_creation, style="HomePage.TButton").grid(row=0, column=0, padx=10, ipadx=20)
+        ttk.Button(button_frame, text="Discard", command=self.load_home_page, style="HomePage.TButton").grid(row=0, column=1, padx=10, ipadx=20)
+
+        self.create_bottom_bar(self.main_frame)
+
+    def _create_task_form_widgets(self, parent_frame, is_new_task, task_id=None):
+        """
+        Helper to draw the common Task and Edit Task form fields.
+        """
+        # label entry
+        self._create_form_row(parent_frame, "Task Label:", 0, self.current_task_vars["label"])
+
+        self._create_form_row(parent_frame, "Due Date (MM/DD/YYYY):", 1, self.current_task_vars["dueDate"])
+
+        self._create_form_row(parent_frame, "Category:", 3, self.current_task_vars["category"])
+
+        priority_options = list(h.c.PRIORITYDICT.values())
+        ttk.Label(parent_frame, text="Priority:").grid(row=2, column=0, sticky="w", pady=5, padx=5)
+
+        priority_menu = ttk.OptionMenu(
+            parent_frame,
+            self.current_task_vars["priority"],
+            self.current_task_vars["priority"].get(),
+            *priority_options
+        )
+        priority_menu.grid(row=2, column=1, sticky="ew", pady=5, padx=5)
+
+        parent_frame.grid_columnconfigure(1, weight=1)
+    
+    def _create_form_row(self, parent_frame, label_text, row_num, textvariable):
+        """
+        Helper to create a label and an entry field in the form.
+        """
+        ttk.Label(parent_frame, text=label_text).grid(row=row_num, column=0, sticky="w", pady=5, padx=5)
+        ttk.Entry(parent_frame, textvariable=textvariable).grid(row=row_num, column=1, sticky="ew", pady=5, padx=5)
+    
+    def _submit_new_task_creation(self):
+        """
+        Gathers form data, validates, and creates the task in the handler.
+        """
+        data = {k: v.get().strip() for k, v in self.current_task_vars.items()}
+
+        if not data["label"]:
+            messagebox.showerror("Error", "Task label cannot be empty.")
+            return
+        
+        if data["dueDate"]:
+            try:
+                h.datetime.strptime(data["dueDate"], "%m/%d/%Y")
+            except ValueError:
+                messagebox.showerror("Error", "Invalid date format. Use MM/DD/YYYY or leave blank.")
+                return
+        
+        idNum = len(h.todoList) + 1
+        new_task = h.todo.ToDo(
+            data["label"],
+            data["dueDate"],
+            data["priority"],
+            data["category"],
+            idNum
+        )
+        h.todoList.append(new_task)
+
+        messagebox.showinfo("Success", f"Task '{data["label"]}' created successfully!")
+        self.load_home_page()
+
+    def load_edit_task_page(self, task):
+        """
+        Loads the task editing page
+
+        Args:
+            task: The ToDo object to be edited
+        """
+        self.clear_frame()
+
+        self.editing_task = task
+
+        page_title = f"Edit: {task.label}"
+        self.create_top_bar(self.main_frame, page_title=page_title)
+
+        back_command = lambda: self.load_task_view_page(self.current_view_type, self.current_category)
+        ttk.Button(self.main_frame, text="<< Back", command=back_command, width=10).pack(side="top", anchor="w", pady=(0, 10), padx=5)
+
+        form_frame = ttk.Frame(self.main_frame, padding="20")
+        form_frame.pack(pady=20, padx=50, fill="x")
+
+        # pre-fill form variables
+        date_str = task.dueDate.strftime("%m/%d/%Y") if task.dueDate else ""
+        self.current_task_vars = {
+            "label": tk.StringVar(value=task.label),
+            "dueDate": tk.StringVar(value=date_str),
+            "priority": tk.StringVar(value=task.priority),
+            "category": tk.StringVar(value=task.category)
+        }
+
+        self._create_task_form_widgets(form_frame, is_new_task=False)
+
+        # delete and save/discard
+        ttk.Button(form_frame, text="Delete Task", command=self._confirm_delete_task, style="HomePage.TButton").grid(row=4, column=9, columnspan=2, pady=(10, 5))
+
+        button_frame = ttk.Frame(self.main_frame)
+        button_frame.pack(fill="x", pady=10)
+        button_frame.grid_columnconfigure((0, 1), weight=1, uniform="button_group")
+
+        ttk.Button(button_frame, text="Save", command=self._submit_task_update, style="HomePage.TButton").grid(row=0, column=0, padx=10, ipadx=20)
+        ttk.Button(button_frame, text="Discard", command=back_command, style="HomePage.TButton").grid(row=0, column=1, padx=10, ipadx=20)
+
+        self.create_bottom_bar(self.main_frame)
+    
+    def _submit_task_update(self):
+        """
+        Gathers form data, validates, and updates the task
+        """
+        data = {k: v.get().strip() for k, v in self.current_task_vars.items()}
+        task = self.editing_task
+
+        if not data["label"]:
+            messagebox.showerror("Error", "Task label cannot be empty.")
+            return
+        
+        if data["dueDate"]:
+            try:
+                h.datetime.strptime(data["dueDate"], "%m/%d/%Y")
+            except ValueError:
+                messagebox.showerror("Error", "Invalid date format. Use MM/DD/YYYY or leave blank.")
+                return
+            
+        priority_key = next(
+            (k for k, v in h.c.PRIORITYDICT.items() if v == data["priority"]), "1"
+        )
+
+        h.update_task_attributes(
+            task.idNum,
+            data["label"],
+            data["dueDate"],
+            priority_key,
+            data["category"]
+        )
+
+        messagebox.showinfo("Success" f"Task '{data["label"]}' updated successfully!")
+        self.load_task_view_page(self.current_view_type, self.current_category)
+
+    def _confirm_delete_task(self):
+        """
+        Asks the user to confirm task deletion
+        """
+        task = self.editing_task
+        confirm = messagebox.askyesno(
+            "Confirm Delete",
+            f"Are you sure you want to permanently delete task: '{task.label}'?"
+        )
+
+        if confirm:
+            h.deleteTodo(task.idNum)
+            messagebox.showinfo("Deleted", f"Task '{task.label}' has been deleted.")
+            self.load_home_page()
 
     def add_task(self):
         """
