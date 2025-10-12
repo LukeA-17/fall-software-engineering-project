@@ -1,6 +1,5 @@
 # Milestone 2 Progress Report
 
-**AI was used to create a basic template for this report**\
 **Team Members:** \[Matthew White, Luke Anderson, Landry Azanbou\]\
 **Date:** \[9/29/2025\]\
 **Milestone 2:** \[Core Implementation\]
