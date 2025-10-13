@@ -97,6 +97,12 @@ class CTMAGUI:
 
         # current date display
         today = date.today().strftime("%B %d, %Y")
+
+        # home button
+        ttk.Button(top_frame, text="Home", command=self.load_home_page, width=8).pack(
+            side="left", anchor="nw", padx=(0, 10)
+        )
+
         ttk.Label(
             top_frame,
             text=f"Current Date: {today}",
@@ -321,10 +327,6 @@ class CTMAGUI:
         """
         self.clear_frame()
         self.create_top_bar(self.main_frame, page_title="Create Task")
-
-        ttk.Button(
-            self.main_frame, text="<< Home", command=self.load_home_page, width=10
-        ).pack(side="top", anchor="w", pady=(0, 10), padx=5)
 
         form_frame = ttk.Frame(self.main_frame, padding="20")
         form_frame.pack(pady=20, padx=50, fill="x")
@@ -660,7 +662,7 @@ class CTMAGUI:
         """
         h.saveData()
         self.master.destroy()
-        print("\nThank yu for using CTMA!")
+        print("\nThank you for using CTMA!")
 
 
 def start_gui():
