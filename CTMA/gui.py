@@ -228,7 +228,7 @@ class CTMAGUI:
         categories = self._get_unique_categories()
         for i, cat in enumerate(categories):
             row, col = divmod(i, 3)
-            count = len([t for t in s.todoList if t.category == cat])
+            count = len([t for t in th.todoList if t.category == cat])
 
             self.create_view_button(
                 category_grid_frame,
@@ -658,7 +658,7 @@ class CTMAGUI:
         Extracts a set of all unique, non-empty categories from the todoList
         """
         categories = set()
-        for t in s.todoList:
+        for t in th.todoList:
             if t.category and t.category.strip():
                 categories.add(t.category.strip())
         return sorted(list(categories))
