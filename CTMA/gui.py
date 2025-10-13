@@ -1,8 +1,9 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-import todo_handler as h
+import todo_handler as th
 from datetime import date
-import shared as s
+
+import cli as c
 
 
 def set_styles(master):
@@ -56,7 +57,7 @@ class CTMAGUI:
         self.current_sort_key = "Priority"
 
         # load save data from backend
-        h.loadSave()
+        th.loadSave()
 
         # apply styles
         set_styles(master)
@@ -198,7 +199,7 @@ class CTMAGUI:
         )
 
         # all tasks button
-        num_taks = len(s.todoList)
+        num_taks = len(th.todoList)
         self.create_view_button(
             grid_frame,
             f"All ({num_taks})",
@@ -208,7 +209,7 @@ class CTMAGUI:
         )
 
         # completed button
-        completed_count = len([t for t in s.todoList if t.complete])
+        completed_count = len([t for t in th.todoList if t.complete])
         self.create_view_button(
             grid_frame,
             f"Completed ({completed_count})",
@@ -336,7 +337,7 @@ class CTMAGUI:
         self.current_task_vars = {
             "label": tk.StringVar(),
             "dueDate": tk.StringVar(),
-            "priority": tk.StringVar(value=h.s.PRIORITYDICT["1"]),  # default to None
+            "priority": tk.StringVar(value=th.PRIORITYDICT["1"]),  # default to None
             "category": tk.StringVar(),
         }
 
@@ -444,7 +445,7 @@ class CTMAGUI:
             widget.destroy()
 
         # get filtered and sorted tasks from the handler
-        tasks_to_display = h.get_tasks_for_view(
+        tasks_to_display = th.get_tasks_for_view(
             view_type=self.current_view_type,
             category=self.current_category,
             sort_key=self.current_sort_key,
@@ -549,7 +550,7 @@ class CTMAGUI:
             parent_frame, "Category:", 3, self.current_task_vars["category"]
         )
 
-        priority_options = list(h.s.PRIORITYDICT.values())
+        priority_options = list(th.PRIORITYDICT.values())
         ttk.Label(parent_frame, text="Priority:").grid(
             row=2, column=0, sticky="w", pady=5, padx=5
         )
@@ -591,18 +592,18 @@ class CTMAGUI:
 
         if data["dueDate"]:
             try:
-                h.datetime.strptime(data["dueDate"], "%m/%d/%Y")
+                th.datetime.strptime(data["dueDate"], "%m/%d/%Y")
             except ValueError:
                 messagebox.showerror(
                     "Error", "Invalid date format. Use MM/DD/YYYY or leave blank."
                 )
                 return
 
-        idNum = len(s.todoList) + 1
-        new_task = h.todo.ToDo(
+        idNum = len(th.todoList) + 1
+        new_task = th.todo.ToDo(
             data["label"], data["dueDate"], data["priority"], data["category"], idNum
         )
-        s.todoList.append(new_task)
+        th.todoList.append(new_task)
 
         messagebox.showinfo("Success", f"Task '{data["label"]}' created successfully!")
         self.load_home_page()
@@ -618,33 +619,24 @@ class CTMAGUI:
             messagebox.showerror("Error", "Task label cannot be empty.")
             return
 
-        dueDate_str = data["dueDate"]
-        new_date_obj = None
-        if dueDate_str:
+        if data["dueDate"]:
             try:
-                new_date_obj = h.datetime.strptime(dueDate_str, "%m/%d/%Y").date()
+                th.datetime.strptime(data["dueDate"], "%m/%d/%Y")
             except ValueError:
                 messagebox.showerror(
                     "Error", "Invalid date format. Use MM/DD/YYYY or leave blank."
                 )
                 return
 
-        if task.label != data["label"]:
-            task.editLabel(data["label"])
-
-        if task.dueDate != new_date_obj:
-            task.editDueDate(dueDate_str)
-
         priority_key = next(
-            (k for k, v in h.s.PRIORITYDICT.items() if v == data["priority"]), "1"
+            (k for k, v in th.PRIORITYDICT.items() if v == data["priority"]), "1"
         )
-        if task.priority != data["priority"]:
-            task.editPriority(priority_key)
 
-        if task.category != data["category"]:
-            task.editCategory(data["category"])
+        c.update_task_attributes(
+            task.idNum, data["label"], data["dueDate"], priority_key, data["category"]
+        )
 
-        messagebox.showinfo("Success", f"Task '{data["label"]}' updated successfully!")
+        messagebox.showinfo("Success" f"Task '{data["label"]}' updated successfully!")
         self.load_task_view_page(self.current_view_type, self.current_category)
 
     def _confirm_delete_task(self):
@@ -658,19 +650,9 @@ class CTMAGUI:
         )
 
         if confirm:
-            try:
-                s.todoList.pop(task.idNum - 1)
-                # re-index remaining tasks
-                for i, t in enumerate(s.todoList):
-                    t.idNum = i + 1
-                messagebox.showinfo("Deleted", f"Task '{task.label}' has been deleted.")
-                self.load_home_page()
-            except IndexError:
-                messagebox.showerror("Error", "Task not found for deletion.")
-            except Exception as e:
-                messagebox.showerror(
-                    "Error", f"An unexpected error occurred during deletion: {e}"
-                )
+            c.deleteTodo(task.idNum)
+            messagebox.showinfo("Deleted", f"Task '{task.label}' has been deleted.")
+            self.load_home_page()
 
     # =========================================
     # Application Control
@@ -680,7 +662,7 @@ class CTMAGUI:
         """
         Saves all task data and closes the application window
         """
-        h.saveData()
+        th.saveData()
         self.master.destroy()
         print("\nThank you for using CTMA!")
 

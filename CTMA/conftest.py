@@ -8,7 +8,6 @@ Functions:
 
 import pytest
 import json
-import shared as s
 import todo_handler as th
 
 MOCK_SAVE_DATA = {
@@ -32,9 +31,9 @@ def cleanup_handler_list():
     Clears the global todoList in handler before and after each test
     to ensure clean test environment.
     """
-    s.todoList.clear()
+    th.todoList.clear()
     yield
-    s.todoList.clear()
+    th.todoList.clear()
 
 @pytest.fixture
 def mock_save_data():

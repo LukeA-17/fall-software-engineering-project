@@ -14,7 +14,6 @@ Functions:
 import pytest
 from unittest.mock import patch, mock_open
 import todo as t
-import shared as s
 
 def test_todo_initialization():
     """

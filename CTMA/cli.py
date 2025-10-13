@@ -10,7 +10,7 @@ Functions:
 
  ToDo Management:
  - changeCompletion(selection): Takes int task id. Prompts user to change completion status
- - createTodo(): Prompts user to create a new todo item, adds to s.todoList
+ - createTodo(): Prompts user to create a new todo item, adds to th.todoList
  - editTodo(selection): Takes int task id and prompts user to edit that task
  - deleteTodo(selection): Takes int task id and deletes that task
  - searchTodo(): Prompts user for a search term and displays matches
@@ -21,7 +21,6 @@ Functions:
 """
 
 import todo as todo
-import shared as s
 import todo_handler as th
 from datetime import date, datetime
 
@@ -31,13 +30,13 @@ from datetime import date, datetime
 ####################
 def viewTodos():
     """Print label only of all todos"""
-    for t in s.todoList:
+    for t in th.todoList:
         t.printLabel()
 
 
 def viewTodosInfoed():
     """Print all information about all todos"""
-    for t in s.todoList:
+    for t in th.todoList:
         print(t)
 
 
@@ -72,7 +71,7 @@ def selectTodo():
         selection = input("Task number: ")
         if selection.isdigit():
             selection = int(selection)
-            if 0 <= selection <= len(s.todoList):
+            if 0 <= selection <= len(th.todoList):
                 print()
                 return selection
             else:
@@ -115,7 +114,7 @@ def changeCompletion(selection):
     if selection == 0:
         return
     try:
-        curTodo = s.todoList[selection - 1]
+        curTodo = th.todoList[selection - 1]
     except IndexError:
         print("Error: Task not found with that number.")
         return
@@ -141,7 +140,7 @@ def changeCompletion(selection):
 
 
 def createTodo():
-    """Creates a new ToDo object from user input, appends to s.todoList"""
+    """Creates a new ToDo object from user input, appends to th.todoList"""
     # validate label input
     while True:
         label = input("Enter task label: ").strip()
@@ -165,16 +164,16 @@ def createTodo():
     # validate priority input
     while True:
         priority = input("Enter priority:\n(1: None, 2: Low, 3: Medium, 4: High)\n")
-        if priority in s.PRIORITYDICT:
-            priority = s.PRIORITYDICT[priority]
+        if priority in th.PRIORITYDICT:
+            priority = th.PRIORITYDICT[priority]
             break
         else:
             print("Invalid priority choice.\n")
 
     category = input("Enter task category: ").strip()
-    idNum = len(s.todoList) + 1
+    idNum = len(th.todoList) + 1
 
-    s.todoList.append(todo.ToDo(label, dueDate, priority, category, idNum))
+    th.todoList.append(todo.ToDo(label, dueDate, priority, category, idNum))
     print(f"{label} added.\n")
 
 
@@ -183,7 +182,7 @@ def editTodo(selection):
     if selection == 0:
         return
     try:
-        curTodo = s.todoList[selection - 1]
+        curTodo = th.todoList[selection - 1]
     except IndexError:
         print("Invalid task selection.")
         return
@@ -209,7 +208,7 @@ def editTodo(selection):
             newVal = input(prompt).strip()
 
             if editChoice == 3:
-                if newVal not in s.PRIORITYDICT:
+                if newVal not in th.PRIORITYDICT:
                     print("Invalid priority choice.\n")
                     continue  # restart loop
 
@@ -224,11 +223,11 @@ def deleteTodo(selection):
     """Takes in task id, and deletes the associated todo object"""
     try:
         # task num is 1 indexed
-        deletedTask = s.todoList.pop(selection - 1)
+        deletedTask = th.todoList.pop(selection - 1)
         print(f"Task {selection}: {deletedTask.label} deleted successfully.\n")
 
         # re-index tasks
-        for i, t in enumerate(s.todoList):
+        for i, t in enumerate(th.todoList):
             t.idNum = i + 1
     except IndexError:
         print("Error: Task not found with that number.\n")
@@ -270,7 +269,7 @@ def update_task_attributes(task_id, label, dueDate, priority_key, category):
         bool: True if task was found and updated, False otherwise.
     """
     try:
-        curTodo = s.todoList[task_id - 1]
+        curTodo = th.todoList[task_id - 1]
     except IndexError:
         print(f"Error: Task ID {task_id} not found.")
         return False
@@ -281,7 +280,7 @@ def update_task_attributes(task_id, label, dueDate, priority_key, category):
     if curTodo.dueDate != curTodo._parse_date(dueDate):
         curTodo.editDueDate(dueDate)
 
-    new_priority_value = s.PRIORITYDICT.get(priority_key)
+    new_priority_value = th.PRIORITYDICT.get(priority_key)
     if curTodo.priority != new_priority_value:
         curTodo.editPriority(priority_key)
 

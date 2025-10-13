@@ -15,8 +15,14 @@ Methods:
     editCategory(self, newVal): Accepts string newVal, sets category to newVal
     toggleComplete(self, choice): Accepts int choice. 1 marks todo complete, 2 marks incomplete
 """
-import shared as s
+
 from datetime import date, datetime
+PRIORITYDICT = {
+    "1": "None",
+    "2": "Low",
+    "3": "Medium",
+    "4": "High"  
+}
 
 class ToDo():
     """
@@ -129,10 +135,10 @@ class ToDo():
         Edit the priority of an existing todo
 
         Parameters:
-            newVal (int): value that corresponds to desired new priority from s.PRIORITYDICT
+            newVal (int): value that corresponds to desired new priority from PRIORITYDICT
         """
-        self.priority = s.PRIORITYDICT[newVal]
-        print(f"Priority set to {s.PRIORITYDICT[newVal]}\n")
+        self.priority = PRIORITYDICT[newVal]
+        print(f"Priority set to {PRIORITYDICT[newVal]}\n")
 
     def editCategory(self, newVal):
         """

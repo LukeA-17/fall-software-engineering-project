@@ -13,8 +13,21 @@ Functions:
 
 import json
 import todo as todo
-import shared as s
 from datetime import date, datetime
+
+
+#####################
+# Handler Variables #
+#####################
+# mapping of numbers to priorities
+PRIORITYDICT = {
+    "1": "None",
+    "2": "Low",
+    "3": "Medium",
+    "4": "High"  
+}
+
+todoList = [] # stores todo objects during runtime
 
 
 ####################
@@ -42,12 +55,12 @@ def loadSave():
                 item["dueDate"],
                 item["priority"],
                 item["category"],
-                (len(s.todoList) + 1)
+                (len(todoList) + 1)
             )
             if "complete" in item and item["complete"]:
                 new_task.toggleComplete(1)
             
-            s.todoList.append(new_task)
+            todoList.append(new_task)
             count += 1
         print(f"{count} tasks loaded successfully.\n")
 
@@ -57,7 +70,7 @@ def saveData():
     Turns todoList into a dict, stores that dict into data.json
     """
     todoDict = {}
-    for i, t in enumerate(s.todoList):
+    for i, t in enumerate(todoList):
         date_str = t.dueDate.strftime("%m/%d/%Y") if t.dueDate else ""
         todoDict[i] = {
             "label": t.label,
@@ -86,7 +99,7 @@ def search(term):
     term = term.lower()
     foundTodos = []
 
-    for todo in s.todoList:
+    for todo in todoList:
         if todo.search(term):
             foundTodos.append(todo)
 
@@ -108,10 +121,10 @@ def get_tasks_for_view(view_type="All", category=None, sort_key="Priority", reve
     Returns:
         A list of filtered and sorted ToDo objects
     """
-    filtered_tasks = s.todoList
+    filtered_tasks = todoList
 
     # convert strings in priority map to ints
-    PRIORITY_SORT_MAP = {v: int(k) for k, v in s.PRIORITYDICT.items()}
+    PRIORITY_SORT_MAP = {v: int(k) for k, v in PRIORITYDICT.items()}
 
     # Filter by view type
     if view_type == "Completed":
