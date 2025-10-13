@@ -123,7 +123,6 @@ Data layer modules:
 Logic layer modules:
 - todo.py (includes the ToDo Class and its methods)
 - todo_handler.py (handles management of ToDo objects. Acts as the main bridge between presentation and data)
-- shared.py (shared memory during runtime)
 
 Presentation layer modules:
 - cli.py (collects user input through the command line)
