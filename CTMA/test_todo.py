@@ -1,7 +1,20 @@
+"""
+test_todo.py runs of series of tests for functionality
+
+Functions:
+    test_todo_initialization(): tests correct attribute assignment
+    test_todo_str_method(): tests proper formatting
+    test_todo_printlabel(capfd): tests print formatting
+    test_todo_edit_label(capfd): tests label editing
+    test_todo_edit_priority(capfd): tests priority editing
+    test_toggle_complete(capfd): tests marking todos as Complete
+    test_toggle_ongoing(capfd): tests marking todos as Ongoing
+"""
+
 import pytest
 from unittest.mock import patch, mock_open
 import todo as t
-import constants as c
+import shared as s
 
 def test_todo_initialization():
     """

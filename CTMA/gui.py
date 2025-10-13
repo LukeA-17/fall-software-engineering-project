@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-import handler as h
+import todo_handler as h
 from datetime import date
 
 def set_styles(master):
