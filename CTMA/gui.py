@@ -2,6 +2,9 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 import todo_handler as h
 from datetime import date
+import shared as s
+
+import cli as c
 
 
 def set_styles(master):
@@ -197,7 +200,7 @@ class CTMAGUI:
         )
 
         # all tasks button
-        num_taks = len(h.todoList)
+        num_taks = len(s.todoList)
         self.create_view_button(
             grid_frame,
             f"All ({num_taks})",
@@ -207,7 +210,7 @@ class CTMAGUI:
         )
 
         # completed button
-        completed_count = len([t for t in h.todoList if t.complete])
+        completed_count = len([t for t in s.todoList if t.complete])
         self.create_view_button(
             grid_frame,
             f"Completed ({completed_count})",
@@ -335,7 +338,7 @@ class CTMAGUI:
         self.current_task_vars = {
             "label": tk.StringVar(),
             "dueDate": tk.StringVar(),
-            "priority": tk.StringVar(value=h.c.PRIORITYDICT["1"]),  # default to None
+            "priority": tk.StringVar(value=h.s.PRIORITYDICT["1"]),  # default to None
             "category": tk.StringVar(),
         }
 
@@ -548,7 +551,7 @@ class CTMAGUI:
             parent_frame, "Category:", 3, self.current_task_vars["category"]
         )
 
-        priority_options = list(h.c.PRIORITYDICT.values())
+        priority_options = list(h.s.PRIORITYDICT.values())
         ttk.Label(parent_frame, text="Priority:").grid(
             row=2, column=0, sticky="w", pady=5, padx=5
         )
@@ -597,11 +600,11 @@ class CTMAGUI:
                 )
                 return
 
-        idNum = len(h.todoList) + 1
+        idNum = len(s.todoList) + 1
         new_task = h.todo.ToDo(
             data["label"], data["dueDate"], data["priority"], data["category"], idNum
         )
-        h.todoList.append(new_task)
+        s.todoList.append(new_task)
 
         messagebox.showinfo("Success", f"Task '{data["label"]}' created successfully!")
         self.load_home_page()
@@ -627,10 +630,10 @@ class CTMAGUI:
                 return
 
         priority_key = next(
-            (k for k, v in h.c.PRIORITYDICT.items() if v == data["priority"]), "1"
+            (k for k, v in h.s.PRIORITYDICT.items() if v == data["priority"]), "1"
         )
 
-        h.update_task_attributes(
+        c.update_task_attributes(
             task.idNum, data["label"], data["dueDate"], priority_key, data["category"]
         )
 
@@ -648,7 +651,7 @@ class CTMAGUI:
         )
 
         if confirm:
-            h.deleteTodo(task.idNum)
+            c.deleteTodo(task.idNum)
             messagebox.showinfo("Deleted", f"Task '{task.label}' has been deleted.")
             self.load_home_page()
 
