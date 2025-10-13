@@ -1,9 +1,6 @@
 # AI Usage Log
-All AI use is documented here, sorted by document and date.
+All CTMA AI use is documented here, categorized by document and date.
 
-## Documentation
-
-### README:
 
 ### Design Document:
 10/11/25  
@@ -26,24 +23,3 @@ Prompt: Can you please help me generate a progress report for my software engine
 Content Used: Basic template was used to provide structure for the report  
 Rationale: Streamlined the process so we could focus on the actual content  
 Commit 252e621
-
-
-## Code
-
-### conftest.py
-
-### constants.py
-
-### handler.py
-
-### main.py
-
-### test_handler.py
-
-### test_todo.py
-
-### todo.py
-
-### user_flow.py
-
-## Other
