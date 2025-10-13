@@ -53,7 +53,7 @@ This software allows for all the basic operations (CRUD)
 
 ### 2.4 Operating Environment
 
-This application is designed to run on a locam machine running Python 3.10 or greater with the Tkinter library for the GUI.
+This application is designed to run on a local machine running Python 3.10 or greater with the Tkinter library for the GUI.
 
 ### 2.5 Design and Implementation Constraints
 

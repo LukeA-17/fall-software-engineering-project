@@ -25,7 +25,7 @@ CTMA is intended to allow users to track and manage a variety of different todo 
 - CLI: Command-line interface
 - CRUD: Create, Read, Update, Delete. The four basic functions for task management
 - ToDo Object: Data structure representing a task
-- ToDo/Task Item: Interchangable description for an something that needs to be completed. Has a label, due date, priority, and category
+- ToDo/Task Item:  Interchangeable description for something that needs to be completed. Has a label, due date, priority, and category
 - Tkinter: Tk interface. A Python package to implement a GUI.
 
 ### 1.4 References
@@ -56,11 +56,10 @@ CTMA is designed to allow users to create and manage their tasks, following the 
 
 ### 2.3 User Classes and Characteristics
 
-CTMA users are expected to be students, professionals, teams, and individuals. Because this is a large scope of potential users, CTMA needs to be flexible to accomodate their different needs. For example:  
-- Students might have a higher need for due date accessiblity, because homework and exam deadlines are inflexible
+CTMA users are expected to be students, professionals, teams, and individuals. Because this is a large scope of potential users, CTMA needs to be flexible to accommodate their different needs. For example:  
+- Students might have a higher need for due date accessibility, because homework and exam deadlines are inflexible
 - Professionals might need a greater degree of shareability of files to coordinate with others 
-- Individuals might be more reliant on seperating tasks by category so that they can seperate their personal life from their professional life
-
+- Individuals might be more reliant on separating tasks by category so that they can separate their personal life from their professional life
 
 ### 2.4 Operating Environment
 
@@ -102,7 +101,7 @@ This application is designed to run on a local machine running Python 3.10 or gr
 - The 'Create Task' page should have form input fields for the task label, due date, priority, and category.
 - The system should validate that the task label is not empty.
 - The system should validate that the due date is in the correct format (MM/DD/YYYY).
-- Clicking on the "..." next to a task take's you to that task's edit page.
+- Clicking on the "..." next to a task takes you to that task's edit page.
 - The edit task page should have a delete option that has you confirm before removing it.
 
 
@@ -112,7 +111,7 @@ This application is designed to run on a local machine running Python 3.10 or gr
 
 - The GUI should be responsive when loading a long list of tasks.
 
-- Modules should maintain high levels of seperation between presentation, logic, and data layers
+- Modules should maintain high levels of separation between presentation, logic, and data layers
 
 - Program should allow for easy transfer of data
 

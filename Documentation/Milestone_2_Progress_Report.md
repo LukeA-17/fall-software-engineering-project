@@ -16,7 +16,7 @@ functionality of the system
 ## 2. Completed Work
 
 - Fundamental code structure established
-- All specified features now availible via command line
+- All specified features now available via command line
 - Test cases created
 
 ------------------------------------------------------------------------

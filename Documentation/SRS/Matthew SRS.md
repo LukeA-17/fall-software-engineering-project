@@ -20,7 +20,7 @@ CTMA is intended to allow users to track and manage a variety of different todo 
 - CTMA: Stands for Collaborative Todo Manager Application
 - CLI: Stands for command line interface. cli.py is the module dedicated to handling command line presentation
 - GUI: Stands for general user interface. gui.py is the module dedicated to handling the general user interface presentation
-- ToDo/Task: Interchangable description for an item that needs to be completed. Has a label, due date, priority, and category
+- ToDo/Task: Interchangeable description for an item that needs to be completed. Has a label, due date, priority, and category
 
 ### 1.4 References
 [README](https://github.com/LukeA-17/fall-software-engineering-project/blob/main/README.md)  
@@ -48,7 +48,7 @@ CTMA is designed to allow users to create and manage their tasks.
 Identify user types and their needs.  
 *Tip: Use personas and user journey maps.*
 
-CTMA users are expected to be students, professionals, teams, and individuals. Because this is a large scope of potential users, CTMA needs to be flexible to accomodate their different needs. Students might have a higher need for due dates, because homework and exam deadlines are inflexible. Professionals might need a greater degree of shareability of files to coordinate with others. Individuals might be more reliant on seperating tasks by category so that they can seperate their personal life from their professional life.
+CTMA users are expected to be students, professionals, teams, and individuals. Because this is a large scope of potential users, CTMA needs to be flexible to accommodate their different needs. Students might have a higher need for due dates, because homework and exam deadlines are inflexible. Professionals might need a greater degree of shareability of files to coordinate with others. Individuals might be more reliant on separating tasks by category so that they can separate their personal life from their professional life.
 
 ### 2.4 Operating Environment
 
@@ -70,7 +70,7 @@ CTMA is intended to allow users to track and manage a variety of different todo 
 - Create new tasks
 - Delete tasks
 - View and sort through existing tasks
-- Modify existing taks
+- Modify existing tasks
 - Search existing tasks
 - Save and load data between sessions
 
@@ -89,7 +89,7 @@ User Stories:
 
 ### 3.2 Non-Functional Requirements
 
-CTMA is expected to run without crashing, maintain high levels of seperation between presentation, logic, and data layers, and allow for easy transfer of data.
+CTMA is expected to run without crashing, maintain high levels of separation between presentation, logic, and data layers, and allow for easy transfer of data.
 
 ### 3.3 External Interface Requirements
 

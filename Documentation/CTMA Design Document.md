@@ -12,7 +12,7 @@ CTMA is intended to allow users to track and manage a variety of different todo 
 - Create new tasks
 - Delete tasks
 - View and sort through existing tasks
-- Modify existing taks
+- Modify existing tasks
 - Search existing tasks
 - Save and load data between sessions
 
