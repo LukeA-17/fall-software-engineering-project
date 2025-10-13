@@ -4,6 +4,7 @@ This document describes the functional requirements, architecture, and system de
 ## Table of Contents
 1. [Requirements](#1-requirements)
 2. [System Design](#2-system-design)
+3. [Interface Design](#3-interface-design)
 
 ## 1. Requirements
 ### High Level Functionality 
@@ -55,3 +56,28 @@ Other modules:
 - test_handler.py, test_todo.py (verify program works correctly)
 
 The UML component diagram for CTMA is included in figure 1 below:
+
+_Figure 1, CTMA component diagram:_
+
+![CTMA Component Diagram](https://github.com/LukeA-17/fall-software-engineering-project/blob/main/Documentation/Images/design_doc/component_diagram.png?raw=true)
+
+Data flow:
+- To be included at a later date
+
+## 3. Interface Design
+The GUI will be developed by building on the following wireframes.
+
+Home Page Wireframe:  
+![Home Page Wirefram](https://github.com/LukeA-17/fall-software-engineering-project/blob/main/Documentation/Images/design_doc/wireframe/Home%20Page.png?raw=true)
+
+Create Task Wireframe:  
+![Create Task Wirefram](https://github.com/LukeA-17/fall-software-engineering-project/blob/main/Documentation/Images/design_doc/wireframe/createTask.png?raw=true)
+
+Edit Task Wireframe:  
+![Edit Task Wireframe](https://github.com/LukeA-17/fall-software-engineering-project/blob/main/Documentation/Images/design_doc/wireframe/editTask.png?raw=true)
+
+Task View Wireframe:  
+![Task View Wireframe](https://github.com/LukeA-17/fall-software-engineering-project/blob/main/Documentation/Images/design_doc/wireframe/taskview.png?raw=true)
+
+Settings Wireframe:  
+![Settings Wireframe](https://github.com/LukeA-17/fall-software-engineering-project/blob/main/Documentation/Images/design_doc/wireframe/settings.png?raw=true)
