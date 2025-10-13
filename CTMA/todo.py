@@ -78,6 +78,7 @@ class ToDo():
         """Prints object's own label"""
         print(f"Task {self.idNum}: {self.label}")
     
+    
     def search(self, term):
         """Check if (string) term is in self, returns T/F"""
         for attr, value in vars(self).items():
