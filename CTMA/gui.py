@@ -4,8 +4,6 @@ import todo_handler as h
 from datetime import date
 import shared as s
 
-import cli as c
-
 
 def set_styles(master):
     """
@@ -620,24 +618,33 @@ class CTMAGUI:
             messagebox.showerror("Error", "Task label cannot be empty.")
             return
 
-        if data["dueDate"]:
+        dueDate_str = data["dueDate"]
+        new_date_obj = None
+        if dueDate_str:
             try:
-                h.datetime.strptime(data["dueDate"], "%m/%d/%Y")
+                new_date_obj = h.datetime.strptime(dueDate_str, "%m/%d/%Y").date()
             except ValueError:
                 messagebox.showerror(
                     "Error", "Invalid date format. Use MM/DD/YYYY or leave blank."
                 )
                 return
 
+        if task.label != data["label"]:
+            task.editLabel(data["label"])
+
+        if task.dueDate != new_date_obj:
+            task.editDueDate(dueDate_str)
+
         priority_key = next(
             (k for k, v in h.s.PRIORITYDICT.items() if v == data["priority"]), "1"
         )
+        if task.priority != data["priority"]:
+            task.editPriority(priority_key)
 
-        c.update_task_attributes(
-            task.idNum, data["label"], data["dueDate"], priority_key, data["category"]
-        )
+        if task.category != data["category"]:
+            task.editCategory(data["category"])
 
-        messagebox.showinfo("Success" f"Task '{data["label"]}' updated successfully!")
+        messagebox.showinfo("Success", f"Task '{data["label"]}' updated successfully!")
         self.load_task_view_page(self.current_view_type, self.current_category)
 
     def _confirm_delete_task(self):
@@ -651,9 +658,19 @@ class CTMAGUI:
         )
 
         if confirm:
-            c.deleteTodo(task.idNum)
-            messagebox.showinfo("Deleted", f"Task '{task.label}' has been deleted.")
-            self.load_home_page()
+            try:
+                s.todoList.pop(task.idNum - 1)
+                # re-index remaining tasks
+                for i, t in enumerate(s.todoList):
+                    t.idNum = i + 1
+                messagebox.showinfo("Deleted", f"Task '{task.label}' has been deleted.")
+                self.load_home_page()
+            except IndexError:
+                messagebox.showerror("Error", "Task not found for deletion.")
+            except Exception as e:
+                messagebox.showerror(
+                    "Error", f"An unexpected error occurred during deletion: {e}"
+                )
 
     # =========================================
     # Application Control
