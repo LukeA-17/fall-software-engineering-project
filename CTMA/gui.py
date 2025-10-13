@@ -120,7 +120,6 @@ class CTMAGUI:
             )
 
         # add task button
-        # NOTE placeholder command
         ttk.Button(
             top_frame, text="Add Task", command=self.load_create_task_page, width=12
         ).pack(side="right", anchor="ne")
@@ -217,29 +216,26 @@ class CTMAGUI:
             lambda: self.load_task_view_page("Completed"),
         )
 
-        # --- ROW 2: Category Views ---
-        # NOTE placeholders
-        self.create_view_button(
-            grid_frame,
-            "Category 1",
-            1,
-            0,
-            lambda: self.load_task_view_page("Category 1"),
-        )
-        self.create_view_button(
-            grid_frame,
-            "Category 2",
-            1,
-            1,
-            lambda: self.load_task_view_page("Category 2"),
-        )
-        self.create_view_button(
-            grid_frame,
-            "Category 3",
-            1,
-            2,
-            lambda: self.load_task_view_page("Category 3"),
-        )
+        # --- Category Views ---
+
+        category_grid_frame = ttk.Frame(self.main_frame)
+        category_grid_frame.pack(fill="x", pady=5)
+
+        for i in range(3):
+            category_grid_frame.grid_columnconfigure(i, weight=1, uniform="cat_group")
+
+        categories = self._get_unique_categories()
+        for i, cat in enumerate(categories):
+            row, col = divmod(i, 3)
+            count = len([t for t in s.todoList if t.category == cat])
+
+            self.create_view_button(
+                category_grid_frame,
+                f"{cat} ({count})",
+                row,
+                col,
+                lambda c=cat: self.load_task_view_page(view_type="All", category=c),
+            )
 
     def load_task_view_page(self, view_type="All", category=None):
         """
@@ -671,6 +667,19 @@ class CTMAGUI:
                 messagebox.showerror(
                     "Error", f"An unexpected error occurred during deletion: {e}"
                 )
+
+    # =========================================
+    # Helper Data Methods
+    # =========================================
+    def _get_unique_categories(self):
+        """
+        Extracts a set of all unique, non-empty categories from the todoList
+        """
+        categories = set()
+        for t in s.todoList:
+            if t.category and t.category.strip():
+                categories.add(t.category.strip())
+        return sorted(list(categories))
 
     # =========================================
     # Application Control
