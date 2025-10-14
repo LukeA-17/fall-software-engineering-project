@@ -29,13 +29,17 @@ CTMA is intended to allow users to track and manage a variety of different todo 
 - Tkinter: Tk interface. A Python package to implement a GUI.
 
 ### 1.4 References
-[README](https://github.com/LukeA-17/fall-software-engineering-project/blob/main/README.md)  
-[CTMA Design Document](https://github.com/LukeA-17/fall-software-engineering-project/blob/main/Documentation/CTMA%20Design%20Document.md)  
-[Class Definition Document](https://github.com/LukeA-17/fall-software-engineering-project/blob/main/Documentation/Class%20Definition.md)  
-[Milestone 1 Report](https://github.com/LukeA-17/fall-software-engineering-project/blob/main/Documentation/Milestone_1.md)  
-[Milestone 2 Report](https://github.com/LukeA-17/fall-software-engineering-project/blob/main/Documentation/Milestone_2_Progress_Report.md)  
-[AI Usage Report](https://github.com/LukeA-17/fall-software-engineering-project/blob/main/Documentation/AI%20Usage%20Log.md)  
-[Documentation Folder](https://github.com/LukeA-17/fall-software-engineering-project/tree/main/Documentation)
+**Core Documents:**  
+- [README](https://github.com/LukeA-17/fall-software-engineering-project/blob/main/README.md)  
+- [Design Document](https://github.com/LukeA-17/fall-software-engineering-project/blob/main/Documentation/Core%20Documents/Design%20Document.md)  
+- [Class Definition Document](https://github.com/LukeA-17/fall-software-engineering-project/blob/main/Documentation/Core%20Documents/Class%20Definition.md)  
+- [Project Launch Details](https://github.com/LukeA-17/fall-software-engineering-project/blob/main/Documentation/Core%20Documents/Project%20Launch%20Details.md)  
+- [Test Case Documentation](https://github.com/LukeA-17/fall-software-engineering-project/blob/main/Documentation/Core%20Documents/Test%20Cases.md)  
+- [AI Usage Log](https://github.com/LukeA-17/fall-software-engineering-project/blob/main/Documentation/Core%20Documents/AI%20Usage%20Log.md)
+
+**Useful folders:**
+- [Documentation Folder](https://github.com/LukeA-17/fall-software-engineering-project/tree/main/Documentation)
+- [Meeting Reports](https://github.com/LukeA-17/fall-software-engineering-project/tree/main/Documentation/Meeting%20Reports)
 
 
 ## 2. Overall Description
