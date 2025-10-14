@@ -1,5 +1,5 @@
-## Sept 5 Meeting Report
-10:00 PM via Teams
+## Sep 5 Meeting Report
+10:00 PM via Microsoft Teams
 
 **Attendees:**
 
@@ -11,14 +11,12 @@
 -   Set up scheduled weekly meeting time
 -   Turn in Milestone 1
 
-### Action Items
-
+**Action Items:**
 -   Meet on Mondays, 11:45 in Fulton Library
 -   Decide on project objective
 -   Update Landry on project progress
 
-### Decisions
-
+**Decisions:**
 -   Meeting time set to 11:45 every Monday
 -   Development language will be Python
 -   Scrum Master rotation assigned
@@ -26,12 +24,6 @@
 -   Confirmed acceptable AI use, expected contributions, and development
     structure
 
-### Follow-Ups
-
+**Follow Ups:**
 -   Clarify project requirements
 -   Determine clear project direction
-
-### Effectiveness Assessment
-
--   As this is the first milestone, effectiveness is hard to gauge.
--   This milestone will serve as a benchmark for future ones.
