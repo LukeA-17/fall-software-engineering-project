@@ -1,16 +1,13 @@
-# Milestone 1
-
-## Project Launch Details
-
+# Project Launch Details (Milestone 1)
 ### Team Roster
 
--   Luke Anderson\
--   Landry Azanbou\
+-   Luke Anderson
+-   Landry Azanbou
 -   Matthew White
 
 ### Meeting Schedule
 
--   Weekly meeting 11:45am Mondays (In person, Fulton Library)\
+-   Weekly meeting 11:45am Mondays (In person, Fulton Library)
 -   Additional meetings as needed
 
 ### Scrum Master Rotation
@@ -33,7 +30,6 @@
 -   GitHub Repository:
     [fall-software-engineering-project](https://github.com/LukeA-17/fall-software-engineering-project.git)
 
-------------------------------------------------------------------------
 
 ## Team Charter & Communication Plan
 
@@ -41,20 +37,18 @@
 
 -   Due to a smaller team size and the potential for unbalanced work
     when assigning by category, tasks will be distributed by estimated
-    time and effort of completion.\
+    time and effort of completion.
 -   At weekly meetings, the team will identify project needs, categorize
-    tasks, and assign them.\
+    tasks, and assign them.
 -   The Scrum Master assigns tasks based on individual strengths,
     workload balance, and preferences.
 
 ### Code of Conduct
 
--   Treat all group members with respect\
--   Complete assigned work on time\
--   Be responsive to communication\
+-   Treat all group members with respect
+-   Complete assigned work on time
+-   Be responsive to communication
 -   Prioritize quality assurance
-
-------------------------------------------------------------------------
 
 ## Technology Stack & Development Environment
 
@@ -68,23 +62,22 @@
 
 ### Build/Test Frameworks
 
--   Build: Python virtualenv\
+-   Build: Python virtualenv
 -   Test: pytest
 
 ### Project Board Workflow
 
--   Columns: Backlog, To Do, In Progress, Review, Done\
+-   Columns: Backlog, To Do, In Progress, Review, Done
 -   Labels: bug, feature, documentation, AI-assisted
 
-------------------------------------------------------------------------
 
 ## AI Tooling & Ethics Charter
 
 ### Acceptable AI Use
 
 -   ChatGPT, Gemini, and Copilot may be used to create basic templates,
-    review code, and assist in brainstorming.\
--   They may do simple but repetitive tasks.
+    review code, and assist in brainstorming
+-   They may do simple but repetitive tasks
 
 ### No-AI Zones
 
@@ -94,14 +87,12 @@
 
 ### Provenance Plan
 
--   If AI code is used, add comments noting it was AI-generated.\
+-   If AI code is used, add comments noting it was AI-generated
 -   If AI is used in documentation, include a header stating AI
-    involvement.
+    involvement
 
 ### Verification Plan
 
--   Weekly meeting reminders about AI expectations.\
+-   Weekly meeting reminders about AI expectations
 -   Peer review contributions to ensure human involvement and quality
-    assurance.
-
-------------------------------------------------------------------------
+    assurance
