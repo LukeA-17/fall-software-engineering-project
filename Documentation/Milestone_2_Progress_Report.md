@@ -40,4 +40,5 @@ functionality of the system
 ## 5. Status Summary
 
 -   **On Track / At Risk / Behind**: \[Behind\]
--   **% Completion for this milestone:** \[80%\]
+-   **% Completion for this milestone:** \[80%\]  
+    - Documentation not complete (missing Design Document, README, and more)
