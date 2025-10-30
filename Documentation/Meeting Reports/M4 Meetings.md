@@ -75,3 +75,25 @@
 **Action Items:**
 - Complete assigned work
 - Begin work on M4
+
+
+## Oct 27 Meeting Report
+10:15 pm - 10:35 pm via Microsoft Teams  
+**Attendees:**
+- Luke Anderson
+- Matthew White
+- George Rudolph
+- Landry Azanbou
+
+**Agenda:**  
+- Discuss state of the project and any questions
+
+**Summary:**
+- Discussed individual team member contribution
+- Discussed changes to M4 due date and its progress
+- Encouraged the use of AI in reviewing and improving code, for quality improvement feedback
+- Gave Landry a meeting recap due to late join
+- Explained GitHub code structuring to Landry
+
+**Action Items:**
+- Continue individual assignments and work on M4
