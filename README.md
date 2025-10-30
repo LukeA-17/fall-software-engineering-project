@@ -51,78 +51,79 @@ When you are done using the program, enter 0 into the main menu to save and clos
 
 ## 4. GUI Usage Guide
 To be updated
-🟡🔴
+
+
 ## 5. GitHub Issues Fixes
-### 1. 🟢 Set up weekly meeting with instructor
+### 1. 🟢 [Set up weekly meeting with instructor](https://github.com/LukeA-17/fall-software-engineering-project/issues/1)
 - Weekly meeting scheduled for Mondays at 10:15 am
 
-### 2. 🟢 Milestone 2 Progress Report Status Section
+### 2. 🟢 [Milestone 2 Progress Report Status Section](https://github.com/LukeA-17/fall-software-engineering-project/issues/2)
 - Addressed in commit [28cce9f](https://github.com/LukeA-17/fall-software-engineering-project/commit/28cce9f37ede544f4f717e122aa4378509c742e8)
 
-### 3. 🟢 Missing Docstrings
+### 3. 🟢 [Missing Docstrings](https://github.com/LukeA-17/fall-software-engineering-project/issues/3)
 - Addressed in commit [073371b](https://github.com/LukeA-17/fall-software-engineering-project/commit/073371b66788189898ad80a14f5b652409c5dd0d)
 
-### 4. 🟢 todo module
+### 4. 🟢 [todo module](https://github.com/LukeA-17/fall-software-engineering-project/issues/4)
 - Addressed via issue [reply](https://github.com/LukeA-17/fall-software-engineering-project/issues/4#issuecomment-3399052808)
 
-### 5. 🟢 Snake case vs Camel Case
+### 5. 🟢 [Snake case vs Camel Case](https://github.com/LukeA-17/fall-software-engineering-project/issues/5)
 - Addressed via issue [reply](https://github.com/LukeA-17/fall-software-engineering-project/issues/5#issuecomment-3399048354)
 
-### 6. 🟡 if statements in user_flow.py
+### 6. 🟡 [if statements in user_flow.py](https://github.com/LukeA-17/fall-software-engineering-project/issues/6)
 - In progress
 
-### 7. 🟢 No design document
+### 7. 🟢 [No design document](https://github.com/LukeA-17/fall-software-engineering-project/issues/7)
 - Initially addressed in commit [9cdd384](https://github.com/LukeA-17/fall-software-engineering-project/commit/9cdd3845a66e294be5ed38f0a42f5fb788d1262d)
 - Further addressed in commit [7e050cf](https://github.com/LukeA-17/fall-software-engineering-project/commit/7e050cf463f9ed5683e4eebe5973e92367e0caff)
 
-### 8. 🟢 Missing Design Doc
+### 8. 🟢 [Missing Design Doc](https://github.com/LukeA-17/fall-software-engineering-project/issues/8)
 - Initially addressed in commit [9cdd384](https://github.com/LukeA-17/fall-software-engineering-project/commit/9cdd3845a66e294be5ed38f0a42f5fb788d1262d)
 - Further addressed in commit [7e050cf](https://github.com/LukeA-17/fall-software-engineering-project/commit/7e050cf463f9ed5683e4eebe5973e92367e0caff)
 
-### 9. 🟡 Missing test_cases.md document
+### 9. 🟡 [Missing test_cases.md document](https://github.com/LukeA-17/fall-software-engineering-project/issues/9)
 - In progress
 
-### 10. 🟡 Missing team video
+### 10. 🟡 [Missing team video](https://github.com/LukeA-17/fall-software-engineering-project/issues/10)
 - In progress
 
-### 11. 🟢 Missing AI log
+### 11. 🟢 [Missing AI log](https://github.com/LukeA-17/fall-software-engineering-project/issues/11)
 - Addressed in commit [149115c](https://github.com/LukeA-17/fall-software-engineering-project/commit/149115c3e06d53f89c0cdfaeebfe581576873fc3) and [e352e0f](https://github.com/LukeA-17/fall-software-engineering-project/commit/e352e0fc74602a07ac4155cd9238262ecfe50c8b)
 
-### 12. 🟡 How many test cases do you have?
+### 12. 🟡 [How many test cases do you have?](https://github.com/LukeA-17/fall-software-engineering-project/issues/12)
 - In progress
 
-### 13. 🟡 Incomplete README file
+### 13. 🟡 [Incomplete README file](https://github.com/LukeA-17/fall-software-engineering-project/issues/13)
 - Initially addressed in commits [feefc35](https://github.com/LukeA-17/fall-software-engineering-project/commit/feefc35a2dd2a885a128f64f8bd5adf242e46c91), [6bc2b02](https://github.com/LukeA-17/fall-software-engineering-project/commit/6bc2b02cc055311d6e23e9a003de698b6b5bc823), and [3beb20e](https://github.com/LukeA-17/fall-software-engineering-project/commit/3beb20e76be3840e46e6b7bd4e8f26d84c652275)
 - Additional milestone reqs and comprehensiveness in progress
 
-### 14. 🟢 Missing file input loading option
+### 14. 🟢 [Missing file input loading option](https://github.com/LukeA-17/fall-software-engineering-project/issues/14)
 - Addressed in commit [6bc2b02](https://github.com/LukeA-17/fall-software-engineering-project/commit/6bc2b02cc055311d6e23e9a003de698b6b5bc823) by adding a description of file storage to the README
 
-### 15. 🟢 M2 Results and Score
+### 15. 🟢 [M2 Results and Score](https://github.com/LukeA-17/fall-software-engineering-project/issues/15)
 - Score feedback, no action needed
 
-### 16. 🔴 Commits
-- Unaddressed
-
-### 17. 🟡 No Class Diagram
+### 16. 🟡 [Commits](https://github.com/LukeA-17/fall-software-engineering-project/issues/16)
 - In progress
 
-### 18. 🟡 No Use Case Diagram
+### 17. 🟡 [No Class Diagram](https://github.com/LukeA-17/fall-software-engineering-project/issues/17)
 - In progress
 
-### 19. 🟡 CLI usage example in README; GUI screenshots?
+### 18. 🟡 [No Use Case Diagram](https://github.com/LukeA-17/fall-software-engineering-project/issues/18)
 - In progress
 
-### 20. 🟡 Issues from Milestone 2 some not closed
+### 19. 🟡 [CLI usage example in README; GUI screenshots?](https://github.com/LukeA-17/fall-software-engineering-project/issues/19)
 - In progress
 
-### 21. 🟡 Test Case Doc exists but is empty
+### 20. 🟡 [Issues from Milestone 2 some not closed](https://github.com/LukeA-17/fall-software-engineering-project/issues/20)
 - In progress
 
-### 22. 🟡 Modifications from Previous Milestone
+### 21. 🟡 [Test Case Doc exists but is empty](https://github.com/LukeA-17/fall-software-engineering-project/issues/21)
 - In progress
 
-### 23. 🟡 GUI Design
+### 22. 🟡 [Modifications from Previous Milestone](https://github.com/LukeA-17/fall-software-engineering-project/issues/22)
+- In progress
+
+### 23. 🟡 [GUI Design](https://github.com/LukeA-17/fall-software-engineering-project/issues/23)
 - In progress
 
 ### 24. 🟡 [Recommendations for code improvements](https://github.com/LukeA-17/fall-software-engineering-project/issues/24)
