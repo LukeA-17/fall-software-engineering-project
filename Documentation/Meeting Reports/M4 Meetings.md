@@ -97,3 +97,74 @@
 
 **Action Items:**
 - Continue individual assignments and work on M4
+
+## Oct 30 Meeting Report
+7:30 pm - 7:45 pm via Microsoft Teams  
+**Attendees:**
+- Luke Anderson
+- Matthew White
+- Landry Azanbou
+
+**Agenda:**  
+- Discuss state of the project and any questions
+
+**Summary:**
+- Created schedule for upcoming work:
+  - Have functional code by Nov 9
+  - Complete documentation by Nov 16
+  - Complete AI critique by Nov 23
+- Explained more of GitHub's functionality to Landry
+
+**Action Items:**
+- Work to meet deadlines
+
+## Nov 3 Meeting Report
+10:15 am - 10:22 am via Microsoft Teams  
+**Attendees:**
+- Luke Anderson
+- Matthew White
+- George Rudolph
+- Landry Azanbou
+
+**Agenda:**  
+- Discuss state of the project and any questions
+
+**Summary:**
+- Updated professor on planned deadlines
+- Confirmed we had no questions
+
+**Action Items:**
+- Continue working to meet deadlines
+
+## Nov 6 Meeting Report
+7:30 pm - 7:45 pm via Microsoft Teams  
+**Attendees:**
+- Luke Anderson
+- Matthew White
+
+**Agenda:**  
+- Discuss state of the project and any questions
+
+**Summary:**
+- Confirmed previous plans and commitment to deadlines
+
+**Action Items:**
+- Continue working towards deadlines
+
+## Nov 10 Meeting Report
+10:15 am - 10:25 am via Microsoft Teams  
+**Attendees:**
+- Luke Anderson
+- Matthew White
+- George Rudolph
+- Landry Azanbou
+
+**Agenda:**  
+- Discuss state of the project and any questions
+
+**Summary:**
+- Updated professor on planned deadlines
+- Acknowledged we were running behind schedule
+
+**Action Items:**
+- Continue working to meet deadlines
