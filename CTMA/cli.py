@@ -95,9 +95,10 @@ def selectEditChoice(curTodo):
                     f"3: Priority - Current: {curTodo.priority}\n"
                     f"4: Category - Current: {curTodo.category}\n"
                     f"5: Completion - Current: {curTodo.status}\n"
+                    f"6: Copy Task\n"
                 )
             )
-            if 0 <= editChoice <= 5:
+            if 0 <= editChoice <= 6:
                 print()
                 return editChoice
             else:
@@ -142,40 +143,64 @@ def changeCompletion(selection):
 
 def createTodo():
     """Creates a new ToDo object from user input, appends to th.todoList"""
-    # validate label input
+    # provide paste option
     while True:
-        label = input("Enter task label: ").strip()
-        if label:
+        doPaste = int(input("Paste copied task?\n(0: No, 1: Yes)\n"))
+        if doPaste in {0, 1}:
             break
-        else:
-            print("Task label cannot be empty.\n")
+        print("Input not recognized.\n")
 
-    # validate date input
-    while True:
-        dueDate = input("Enter due date (MM/DD/YYYY, or leave blank): ").strip()
-        if not dueDate:
-            break
+    if (doPaste == 1):
+        copiedTask = th.copiedTask
 
-        try:
-            datetime.strptime(dueDate, "%m/%d/%Y")
-            break
-        except ValueError:
-            print("Invalid date format. Use MM/DD/YYYY or leave blank.\n")
+        if (copiedTask == None):
+            print("Paste Error: No task has been copied yet.\n")
+            return
 
-    # validate priority input
-    while True:
-        priority = input("Enter priority:\n(1: None, 2: Low, 3: Medium, 4: High)\n")
-        if priority in th.PRIORITYDICT:
-            priority = th.PRIORITYDICT[priority]
-            break
-        else:
-            print("Invalid priority choice.\n")
+        date_str = copiedTask.dueDate
+        label = (f"COPY: {copiedTask.label}")
+        dueDate = copiedTask.dueDate
+        priority = copiedTask.priority
+        category = copiedTask.category
+        idNum = len(th.todoList) + 1
 
-    category = input("Enter task category: ").strip()
-    idNum = len(th.todoList) + 1
+        th.todoList.append(todo.ToDo(label, dueDate, priority, category, idNum))
+        print(f"{label} added.\n")
 
-    th.todoList.append(todo.ToDo(label, dueDate, priority, category, idNum))
-    print(f"{label} added.\n")
+    if (doPaste == 0):
+        while True:
+            label = input("Enter task label: ").strip()
+            if label:
+                break
+            else:
+                print("Task label cannot be empty.\n")
+
+        # validate date input
+        while True:
+            dueDate = input("Enter due date (MM/DD/YYYY, or leave blank): ").strip()
+            if not dueDate:
+                break
+
+            try:
+                datetime.strptime(dueDate, "%m/%d/%Y")
+                break
+            except ValueError:
+                print("Invalid date format. Use MM/DD/YYYY or leave blank.\n")
+
+        # validate priority input
+        while True:
+            priority = input("Enter priority:\n(1: None, 2: Low, 3: Medium, 4: High)\n")
+            if priority in th.PRIORITYDICT:
+                priority = th.PRIORITYDICT[priority]
+                break
+            else:
+                print("Invalid priority choice.\n")
+
+        category = input("Enter task category: ").strip()
+        idNum = len(th.todoList) + 1
+
+        th.todoList.append(todo.ToDo(label, dueDate, priority, category, idNum))
+        print(f"{label} added.\n")
 
 
 def editTodo(selection):
@@ -197,6 +222,7 @@ def editTodo(selection):
         ),
         4: ("Enter new category: ", lambda v: curTodo.editCategory(v)),
         5: (None, lambda _v: changeCompletion(selection)),
+        6: (None, lambda: th.copyTask)
     }
 
     while True:
@@ -205,19 +231,26 @@ def editTodo(selection):
             break
 
         prompt, editCall = editOptions.get(editChoice, (None, None))
-        if prompt:
+
+        if editChoice == 6:
+            th.copyTask(curTodo)
+            print(f"{curTodo.label} copied.\n")
+            continue
+        
+        elif editChoice == 5:
+            editCall(None)
+            
+        elif prompt:
             newVal = input(prompt).strip()
 
             if editChoice == 3:
                 if newVal not in th.PRIORITYDICT:
                     print("Invalid priority choice.\n")
-                    continue  # restart loop
-
+                    continue
+            
             editCall(newVal)
-        else:
-            editCall(None)
 
-    return
+        return
 
 
 def deleteTodo(selection):

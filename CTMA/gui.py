@@ -367,18 +367,29 @@ class CTMAGUI:
         button_frame.pack(fill="x", pady=20)
         button_frame.grid_columnconfigure((0, 1), weight=1, uniform="button_group")
 
+        # Paste button
+        ttk.Button(
+            button_frame,
+            text="Paste Task",
+            command=lambda: self.paste_task(),
+            style="HomePage.TButton",
+        ).grid(row=0, column=0, padx=10, ipadx=20, pady = 20, sticky='ew')
+
+        # Save Button
         ttk.Button(
             button_frame,
             text="Save",
             command=self._submit_new_task_creation,
             style="HomePage.TButton",
-        ).grid(row=0, column=0, padx=10, ipadx=20)
+        ).grid(row=1, column=0, padx=10, ipadx=20, sticky='ew')
+        
+        # Discard Button
         ttk.Button(
             button_frame,
             text="Discard",
             command=self.load_home_page,
             style="HomePage.TButton",
-        ).grid(row=0, column=1, padx=10, ipadx=20)
+        ).grid(row=1, column=1, padx=10, ipadx=20, sticky='ew')
 
         self.create_bottom_bar(self.main_frame)
 
@@ -416,6 +427,14 @@ class CTMAGUI:
         }
 
         self._create_task_form_widgets(form_frame, is_new_task=False)
+
+        # Add copy button
+        ttk.Button(
+            form_frame,
+            text="Copy Task",
+            command=lambda:self.copy_task(task),
+            style="HomePage.TButton",
+        ).grid(row=4, column=0, pady=(10, 5), sticky="w")
 
         # delete and save/discard
         ttk.Button(
@@ -730,6 +749,25 @@ class CTMAGUI:
 
             messagebox.showinfo("Deleted", f"Task '{task.label}' has been deleted.")
             self.load_home_page()
+    
+    def copy_task(self, task):
+        th.copyTask(task)
+        messagebox.showinfo("Info Alert", f"{task.label} copied")
+
+    def paste_task(self):
+        copied_task = th.copiedTask
+
+        if not copied_task:
+            messagebox.showinfo("Paste Error", "No task has been copied yet.")
+            return
+
+        date_str = copied_task.dueDate
+        self.current_task_vars["label"].set(f"COPY: {copied_task.label}")
+        self.current_task_vars["dueDate"].set(date_str)
+        self.current_task_vars["priority"].set(copied_task.priority) 
+        self.current_task_vars["category"].set(copied_task.category)
+        
+        messagebox.showinfo("Success", f"Task data copied from '{copied_task.label}'.")
 
     # =========================================
     # Helper Data Methods

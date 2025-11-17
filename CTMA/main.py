@@ -12,8 +12,8 @@ import cli
 
 def main():
     "Starts the main program. Swap commenting to toggle versions"
-    gui.start_gui()
-    # cli.startProgram()
+    #gui.start_gui()
+    cli.startProgram()
 
 
 if __name__ == "__main__":

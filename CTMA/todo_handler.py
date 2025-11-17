@@ -30,6 +30,8 @@ PRIORITYDICT = {
 todoList = [] # stores todo objects during runtime
 curTheme = "Dark"
 
+copiedTask: todo.ToDo = None
+
 ####################
 # System Functions #
 ####################
@@ -135,6 +137,11 @@ def search(term):
             foundTodos.append(todo)
 
     return foundTodos
+
+def copyTask(task):
+    """Duplicates a task, which is appended to the end of todoList. Takes the task object to be duplicated"""
+    global copiedTask
+    copiedTask = todo.ToDo(task.label, task.dueDate, task.priority, task.category, task.idNum)
 
 
 #######################
