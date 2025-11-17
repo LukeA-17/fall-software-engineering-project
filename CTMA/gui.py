@@ -3,7 +3,6 @@ from tkinter import ttk, messagebox
 import todo_handler as th
 from datetime import date
 
-import cli as c
 
 
 def set_styles(master):
@@ -628,7 +627,7 @@ class CTMAGUI:
             (k for k, v in th.PRIORITYDICT.items() if v == data["priority"]), "1"
         )
 
-        c.update_task_attributes(
+        th.update_task_attributes(
             task.idNum, data["label"], data["dueDate"], priority_key, data["category"]
         )
 
@@ -646,7 +645,19 @@ class CTMAGUI:
         )
 
         if confirm:
-            c.deleteTodo(task.idNum)
+            try:
+                # task num is 1 indexed
+                deletedTask = th.todoList.pop(task.idNum - 1)
+                print(f"Task {task.idNum}: {deletedTask.label} deleted successfully.\n")
+
+                # re-index tasks
+                for i, t in enumerate(th.todoList):
+                    t.idNum = i + 1
+            except IndexError:
+                print("Error: Task not found with that number.\n")
+            except Exception as e:
+                print(f"An error occurred during deletion: {e}\n")
+
             messagebox.showinfo("Deleted", f"Task '{task.label}' has been deleted.")
             self.load_home_page()
 

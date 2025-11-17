@@ -254,43 +254,6 @@ def searchTodo():
     return
 
 
-def update_task_attributes(task_id, label, dueDate, priority_key, category):
-    """
-    Updates the attributes of a ToDo object found by its ID
-
-    Args:
-        task-id (int): The ID of the task to update (1-indexed).
-        label (str): The new label.
-        dueDate (str): The new due date string (MM/DD/YYYY).
-        priority_key (str): The new priority key ('1' through '4')
-        category (str): The new category.
-
-    Returns:
-        bool: True if task was found and updated, False otherwise.
-    """
-    try:
-        curTodo = th.todoList[task_id - 1]
-    except IndexError:
-        print(f"Error: Task ID {task_id} not found.")
-        return False
-
-    if curTodo.label != label:
-        curTodo.editLabel(label)
-
-    if curTodo.dueDate != curTodo._parse_date(dueDate):
-        curTodo.editDueDate(dueDate)
-
-    new_priority_value = th.PRIORITYDICT.get(priority_key)
-    if curTodo.priority != new_priority_value:
-        curTodo.editPriority(priority_key)
-
-    if curTodo.category != category:
-        curTodo.editCategory(category)
-
-    # NOTE completion status is handled separately by the checkbox in the GUI
-    return True
-
-
 ####################
 # System functions #
 ####################
