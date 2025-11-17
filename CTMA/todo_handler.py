@@ -2,8 +2,8 @@
 todo_handler.py acts as the logic layer of the program
 Functions:
     System:
-    - loadSave(): loads save data from data.json
-    - saveData(): saves runtime todos into data.json
+    - loadSave(): loads save data from tasks.json
+    - saveData(): saves runtime todos into tasks.json
     - search(term): creates a list of todo items containing a certain string
 
     GUI Support:
@@ -28,21 +28,22 @@ PRIORITYDICT = {
 }
 
 todoList = [] # stores todo objects during runtime
-
+curTheme = "Dark"
 
 ####################
 # System Functions #
 ####################
 def loadSave():
     """
-    Pulls dict of todos from data.json, converts to list of todo objs stored in todoList
+    Pulls dict of todos from tasks.json, converts to list of todo objs stored in todoList. Also loads the user's saved settings.
     """
+    # Load the todoList
     try:
-        with open("data.json", "r") as f:
+        with open(r"CTMA\tasks.json", "r") as f:
             data = json.load(f)
     except FileNotFoundError:
         data = {}
-        with open("data.json", "w") as f:
+        with open(r"CTMA\tasks.json", "w") as f:
             json.dump(data, f)
 
     if len(data) == 0:
@@ -62,13 +63,30 @@ def loadSave():
             
             todoList.append(new_task)
             count += 1
+        print(todoList)
         print(f"{count} tasks loaded successfully.\n")
+    
+    # Load data from settings
+    try:
+        with open("CTMA\settings.json", "r") as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        data = {}
+        with open("CTMA\settings.json", "w") as f:
+            json.dump(data, f)
+    
+    if "theme" in data:
+        global curTheme
+        curTheme = data["theme"]
+    else:
+        curTheme = "UVU"
 
 
 def saveData():
     """
-    Turns todoList into a dict, stores that dict into data.json
+    Turns todoList into a dict, stores that dict into tasks.json
     """
+    # Save task list
     todoDict = {}
     for i, t in enumerate(todoList):
         date_str = t.dueDate.strftime("%m/%d/%Y") if t.dueDate else ""
@@ -81,9 +99,18 @@ def saveData():
             "status": t.status
         }
 
-    with open("data.json", "w") as f:
+    with open(r"CTMA\tasks.json", "w") as f:
         json.dump(todoDict, f, indent = 4)
         print("Tasks saved successfully.")
+
+    # Save settings
+    global curTheme
+    settingsDict = {
+        "theme": curTheme
+        }
+    with open("CTMA\settings.json", "w") as f:
+        json.dump(settingsDict, f, indent = 4)
+        print("Settings saved successfully.")
 
 
 def search(term):

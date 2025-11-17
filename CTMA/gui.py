@@ -4,15 +4,27 @@ import todo_handler as th
 from datetime import date
 
 
-
-def set_styles(master):
+def set_styles(master, theme):
     """
     Sets up the custom styles and themes for the application.
 
     Args:
         master: The root Tkinter window instance.
+        theme: The desired color scheme
     """
     style = ttk.Style(master)
+
+    # Theme Name, background color, foreground color
+    themeMap = {
+        "UVU": ("#4C721D", "#000000"),
+        "Dark": ("#202020", "#000000"),
+        "Light": ("#FFFFFF", "#000000")
+    }
+
+    bg, fg = themeMap[theme]
+
+    style.configure(".", background = bg, foreground = fg)
+
     # define style for main view buttons on the home page
     style.configure("HomePage.TButton", font=("Arial", 10, "bold"), padding=10)
 
@@ -59,7 +71,7 @@ class CTMAGUI:
         th.loadSave()
 
         # apply styles
-        set_styles(master)
+        set_styles(master, th.curTheme)
 
         # main frame for all page content
         self.main_frame = ttk.Frame(master, padding="10")
@@ -104,20 +116,20 @@ class CTMAGUI:
             side="left", anchor="nw", padx=(0, 10)
         )
 
-        ttk.Label(
+        # optional page title
+        if page_title:
+            ttk.Label(top_frame, text=page_title, font=("Arial", 14, "bold")).pack(
+                side="left", padx=20, fill="x", expand=True
+            )
+        else:
+            ttk.Label(
             top_frame,
             text=f"Current Date: {today}",
             font=("Arial", 12, "bold"),
             relief="solid",
             borderwidth=1,
             padding=5,
-        ).pack(side="left", anchor="nw")
-
-        # optional page title
-        if page_title:
-            ttk.Label(top_frame, text=page_title, font=("Arial", 14, "bold")).pack(
-                side="left", padx=20, fill="x", expand=True
-            )
+            ).pack(side="left", anchor="nw")
 
         # add task button
         ttk.Button(
@@ -139,10 +151,12 @@ class CTMAGUI:
         bottom_frame.pack(fill="x", side="bottom", pady=(20, 0))
 
         # settings button
-        # NOTE placeholder command
-        ttk.Label(bottom_frame, text="⚙", font=("Arial", 20)).pack(
-            side="left", anchor="sw"
-        )
+        ttk.Button(
+            bottom_frame,
+            text="⚙",
+            command=self.load_settings_page,
+            width=3
+        ).pack(side="left", anchor="sw")
 
         # exit CTMA button
         ttk.Button(
@@ -197,10 +211,10 @@ class CTMAGUI:
         )
 
         # all tasks button
-        num_taks = len(th.todoList)
+        num_tasks = len(th.todoList)
         self.create_view_button(
             grid_frame,
-            f"All ({num_taks})",
+            f"All ({num_tasks})",
             0,
             1,
             lambda: self.load_task_view_page("All"),
@@ -416,6 +430,51 @@ class CTMAGUI:
         ).grid(row=0, column=1, padx=10, ipadx=20)
 
         self.create_bottom_bar(self.main_frame)
+    
+    def load_settings_page(self):
+        """
+        Loads the Settings Page.
+        """
+        # Initial construction
+        self.clear_frame()
+        self.create_top_bar(self.main_frame, page_title="Settings")
+        settings_frame = ttk.Frame(self.main_frame)
+        settings_frame.pack()
+
+        # Add elements
+        ttk.Label(
+            settings_frame,
+            text="Theme Selection:",
+            font=("Arial", 11, "bold")
+        ).pack(anchor="w", pady=(0, 5))
+
+        # Combobox
+        self.selected_theme = tk.StringVar()
+
+        combo = ttk.Combobox(
+            settings_frame,
+            textvariable=self.selected_theme,
+            values=["UVU", "Dark", "Light"],
+            state="readonly"
+        )
+        combo.pack(anchor="w", pady=(0, 10))
+        combo.current(0)  # optional: set default selection
+
+        # Save button
+        def on_save():
+            new_theme = self.selected_theme.get()
+            th.curTheme = new_theme
+            set_styles(self.master, new_theme)
+
+        ttk.Button(
+            settings_frame,
+            text="Save",
+            command=on_save
+        ).pack(anchor="e", pady=(10, 0))
+
+        # Bottom bar
+        self.create_bottom_bar(self.main_frame)
+
 
     # =========================================
     # Task List Display
