@@ -36,6 +36,7 @@ curTheme = "Dark"
 def loadSave():
     """
     Pulls dict of todos from tasks.json, converts to list of todo objs stored in todoList. Also loads the user's saved settings.
+    Returns True if task count exceeds limit of 250
     """
     # Load the todoList
     try:
@@ -63,6 +64,10 @@ def loadSave():
             
             todoList.append(new_task)
             count += 1
+
+            if (count > 250):
+                return True
+
         print(f"{count} tasks loaded successfully.\n")
     
     # Load data from settings

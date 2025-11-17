@@ -23,6 +23,7 @@ Functions:
 import todo as todo
 import todo_handler as th
 from datetime import date, datetime
+import sys
 
 
 ####################
@@ -290,7 +291,9 @@ def startProgram():
     choice = None
 
     print("Welcome to Collaborative ToDo Manager Application (CTMA)!")
-    th.loadSave()
+    if th.loadSave():
+        print("Task amount exceeds allotted limit of 250 \nProgram Terminating")
+        sys.exit()
 
     while choice != 0:
         choice = displayOptions()

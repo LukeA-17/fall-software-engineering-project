@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 import todo_handler as th
 from datetime import date
+import sys
 
 
 def set_styles(master, theme):
@@ -70,8 +71,11 @@ class CTMAGUI:
         self.current_category = None
         self.current_sort_key = "Priority"
 
-        # load save data from backend
-        th.loadSave()
+        # load save data from backend. Terminate program if more than 250 tasks
+        if th.loadSave():
+            messagebox.showinfo("Info Alert", "Task amount exceeds allotted limit of 250\nProgram Terminating")
+            self.master.destroy()
+            sys.exit()
 
         # apply styles
         set_styles(master, th.curTheme)
@@ -468,6 +472,7 @@ class CTMAGUI:
             new_theme = self.selected_theme.get()
             th.curTheme = new_theme
             set_styles(self.master, new_theme)
+            messagebox.showinfo("Info Alert", "Settings Saved Succesfully!")
 
         ttk.Button(
             settings_frame,
