@@ -1,5 +1,6 @@
 data.json
 notes.txt
+.DS_Store
 CTMA/fiddle.py
 CTMA/demogui.py
 CTMA/gui2.py
