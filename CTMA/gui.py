@@ -24,10 +24,13 @@ def set_styles(master, theme):
 
     bg, fg = themeMap[theme]
 
-    style.configure(".", background = bg, foreground = fg)
+    style.configure("TFrame", background=bg)
+    style.configure(".", foreground = fg)
 
-    # Make all label backgrounds white
+    # Make all relevant widget backgrounds white
     style.configure("TLabel", background="white")
+    style.configure("TCombobox", background="white")
+    style.configure("TOptionmenu", background="white")
 
     # define style for main view buttons on the home page
     style.configure("HomePage.TButton", font=("Arial", 10, "bold"), padding=10)
@@ -465,7 +468,7 @@ class CTMAGUI:
             state="readonly"
         )
         combo.pack(anchor="w", pady=(0, 10))
-        combo.current(0)  # optional: set default selection
+        self.selected_theme.set(th.curTheme)
 
         # Save button
         def on_save():
