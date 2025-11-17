@@ -63,16 +63,15 @@ def loadSave():
             
             todoList.append(new_task)
             count += 1
-        print(todoList)
         print(f"{count} tasks loaded successfully.\n")
     
     # Load data from settings
     try:
-        with open("CTMA\settings.json", "r") as f:
+        with open(r"CTMA\settings.json", "r") as f:
             data = json.load(f)
     except FileNotFoundError:
         data = {}
-        with open("CTMA\settings.json", "w") as f:
+        with open(r"CTMA\settings.json", "w") as f:
             json.dump(data, f)
     
     if "theme" in data:
@@ -108,7 +107,7 @@ def saveData():
     settingsDict = {
         "theme": curTheme
         }
-    with open("CTMA\settings.json", "w") as f:
+    with open(r"CTMA\settings.json", "w") as f:
         json.dump(settingsDict, f, indent = 4)
         print("Settings saved successfully.")
 
