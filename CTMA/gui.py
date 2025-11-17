@@ -16,14 +16,17 @@ def set_styles(master, theme):
 
     # Theme Name, background color, foreground color
     themeMap = {
-        "UVU": ("#4C721D", "#000000"),
-        "Dark": ("#202020", "#000000"),
-        "Light": ("#FFFFFF", "#000000")
+        "UVU": ("#4C721D", "#061F00"),
+        "Dark": ("#000000", "#000000"),
+        "Light": ("#FFFFFF", "#3C2BD4")
     }
 
     bg, fg = themeMap[theme]
 
     style.configure(".", background = bg, foreground = fg)
+
+    # Make all label backgrounds white
+    style.configure("TLabel", background="white")
 
     # define style for main view buttons on the home page
     style.configure("HomePage.TButton", font=("Arial", 10, "bold"), padding=10)
