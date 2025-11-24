@@ -37,8 +37,11 @@ copiedTask: todo.ToDo = None
 ####################
 def loadSave():
     """
-    Pulls dict of todos from tasks.json, converts to list of todo objs stored in todoList. Also loads the user's saved settings.
-    Returns True if task count exceeds limit of 250
+    Pulls dict of todos from tasks.json, converts to list of todo objs stored in todoList. 
+    Also loads the user's saved settings.
+        
+    Raises:
+        ValueError: If save file is corrupt, contains invalid data, OR exceeds 250 tasks.
     """
     # Load the todoList
     try:
@@ -46,51 +49,56 @@ def loadSave():
             data = json.load(f)
     except FileNotFoundError:
         data = {}
-        with open(r"CTMA\tasks.json", "w") as f:
-            json.dump(data, f)
+    except json.JSONDecodeError as e:
+        raise ValueError(f"Critical Error: Corrupt save file (tasks.json). {e}")
 
-    if len(data) == 0:
-        print("No save data found.\n")
-    else:
+    if len(data) > 0:
         count = 0
-        for item in data.values():
-            new_task = todo.ToDo(
-                item["label"],
-                item["dueDate"],
-                item["priority"],
-                item["category"],
-                (len(todoList) + 1)
-            )
-            if "complete" in item and item["complete"]:
-                new_task.toggleComplete(1)
-            
-            todoList.append(new_task)
-            count += 1
+        for i, item in enumerate(data.values()):
+            try:
+                new_task = todo.ToDo(
+                    item.get("label", ""),
+                    item.get("dueDate"),
+                    item.get("priority"),
+                    item.get("category"),
+                    (len(todoList) + 1)
+                )
+                
+                if "complete" in item and item["complete"]:
+                    new_task.toggleComplete(1)
+                
+                todoList.append(new_task)
+                count += 1
 
-            if (count > 250):
-                return True
+                if (count > 250):
+                    raise ValueError("Task amount exceeds allotted limit of 250")
+                    
+            except (ValueError, TypeError) as e:
+                # Raise error immediately to stop loading if data is bad OR limit exceeded
+                raise ValueError(f"Critical Load Error in Task #{i + 1}: {e}")
 
-        print(f"{count} tasks loaded successfully.\n")
-    
     # Load data from settings
     try:
         with open(r"CTMA\settings.json", "r") as f:
             data = json.load(f)
+        if "theme" in data:
+            global curTheme
+            curTheme = data["theme"]
+        else:
+            curTheme = "UVU"
+            
     except FileNotFoundError:
-        data = {}
-        with open(r"CTMA\settings.json", "w") as f:
-            json.dump(data, f)
-    
-    if "theme" in data:
-        global curTheme
-        curTheme = data["theme"]
-    else:
-        curTheme = "UVU"
+        pass # Settings optional
+    except json.JSONDecodeError as e:
+         raise ValueError(f"Critical Error: Corrupt settings file. {e}")
 
 
 def saveData():
     """
     Turns todoList into a dict, stores that dict into tasks.json
+    
+    Raises:
+        OSError: If saving to disk fails.
     """
     # Save task list
     todoDict = {}
@@ -105,18 +113,23 @@ def saveData():
             "status": t.status
         }
 
-    with open(r"CTMA\tasks.json", "w") as f:
-        json.dump(todoDict, f, indent = 4)
-        print("Tasks saved successfully.")
+    try:
+        with open(r"CTMA\tasks.json", "w") as f:
+            json.dump(todoDict, f, indent = 4)
+    except Exception as e:
+        raise OSError(f"Critical Save Error: Failed to save tasks.json: {e}")
 
     # Save settings
     global curTheme
     settingsDict = {
         "theme": curTheme
         }
-    with open(r"CTMA\settings.json", "w") as f:
-        json.dump(settingsDict, f, indent = 4)
-        print("Settings saved successfully.")
+    
+    try:
+        with open(r"CTMA\settings.json", "w") as f:
+            json.dump(settingsDict, f, indent = 4)
+    except Exception as e:
+        raise OSError(f"Critical Save Error: Failed to save settings.json: {e}")
 
 
 def search(term):
@@ -139,26 +152,19 @@ def search(term):
     return foundTodos
 
 def copyTask(task):
-    """Duplicates a task, which is appended to the end of todoList. Takes the task object to be duplicated"""
+    """Duplicates a task. Raises ValueError if task is None."""
     global copiedTask
-    copiedTask = todo.ToDo(task.label, task.dueDate, task.priority, task.category, task.idNum)
+    if task:
+        copiedTask = todo.ToDo(task.label, task.dueDate, task.priority, task.category, task.idNum)
+    else:
+        raise ValueError("Cannot copy empty task.")
 
 
 #######################
 # GUI Support Methods #
 #######################
 def get_tasks_for_view(view_type="All", category=None, sort_key="Priority", reverse=False):
-    """Filters and sorts the todoList for display in the GUI task view
-
-    Args:
-        view_type: 'All', 'Due Today', or 'Completed'
-        category: Specific category name or None for all categories
-        sort_key: Attribute to sort by ('Priority', 'dueDate', 'label')
-        reverse: Boolean to reverse the sort order
-    
-    Returns:
-        A list of filtered and sorted ToDo objects
-    """
+    """Filters and sorts the todoList for display in the GUI task view"""
     filtered_tasks = todoList
 
     # convert strings in priority map to ints
@@ -181,7 +187,6 @@ def get_tasks_for_view(view_type="All", category=None, sort_key="Priority", reve
     
     sort_functions = {
         "Priority": get_priority_value,
-        # None dates are set far in future to sort last
         "dueDate": lambda t: t.dueDate if t.dueDate else date(9999, 1, 1),
         "label": lambda t: t.label.lower()
     }
@@ -190,36 +195,22 @@ def get_tasks_for_view(view_type="All", category=None, sort_key="Priority", reve
 
     if sort_key == "Priority":
         reverse = True
-    else:
-        reverse = reverse
     
     try:
         sorted_tasks = sorted(filtered_tasks, key=key_func, reverse=reverse)
         return sorted_tasks
-    except Exception as e:
-        print(f"Error during task sorting: {e}")
+    except Exception:
+        # Fallback if sort fails
         return filtered_tasks
 
 
 def update_task_attributes(task_id, label, dueDate, priority_key, category):
     """
-    Updates the attributes of a ToDo object found by its ID
-
-    Args:
-        task-id (int): The ID of the task to update (1-indexed).
-        label (str): The new label.
-        dueDate (str): The new due date string (MM/DD/YYYY).
-        priority_key (str): The new priority key ('1' through '4')
-        category (str): The new category.
-
-    Returns:
-        bool: True if task was found and updated, False otherwise.
+    Updates the attributes of a ToDo object found by its ID.
+    Raises IndexError if task_id not found.
     """
-    try:
-        curTodo = todoList[task_id - 1]
-    except IndexError:
-        print(f"Error: Task ID {task_id} not found.")
-        return False
+    # This will raise IndexError if ID is invalid, letting caller handle the error
+    curTodo = todoList[task_id - 1]
 
     if curTodo.label != label:
         curTodo.editLabel(label)
@@ -234,5 +225,4 @@ def update_task_attributes(task_id, label, dueDate, priority_key, category):
     if curTodo.category != category:
         curTodo.editCategory(category)
 
-    # NOTE completion status is handled separately by the checkbox in the GUI
     return True

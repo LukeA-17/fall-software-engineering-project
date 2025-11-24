@@ -17,12 +17,42 @@ Methods:
 """
 
 from datetime import date, datetime
+
 PRIORITYDICT = {
     "1": "None",
     "2": "Low",
     "3": "Medium",
     "4": "High"  
 }
+
+def validateAttributes(label, dueDate, priority, category, idNum):
+    """
+    Validates that all attributes match their expected types.
+    Raises TypeError if any attribute is invalid.
+    Raises ValueError if required attributes are empty.
+    """
+    # Label must be a string and have content
+    if not isinstance(label, str):
+        raise TypeError(f"Label must be a string, got {type(label)}")
+    if not label.strip():
+        raise ValueError("Label cannot be empty")
+        
+    # dueDate can be a date object or None (can be empty)
+    if dueDate is not None and not isinstance(dueDate, (date, datetime)):
+        raise TypeError(f"DueDate must be a date object, got {type(dueDate)}")
+        
+    # Priority can be empty (None allowed), otherwise must be string
+    if priority is not None and not isinstance(priority, str):
+        raise TypeError(f"Priority must be a string or None, got {type(priority)}")
+        
+    # Category can be empty (None allowed), otherwise must be string
+    if category is not None and not isinstance(category, str):
+        raise TypeError(f"Category must be a string or None, got {type(category)}")
+    
+    # idNum validation
+    if not isinstance(idNum, int):
+        raise TypeError(f"ID Number must be an integer, got {type(idNum)}")
+
 
 class ToDo():
     """
@@ -42,17 +72,23 @@ class ToDo():
     ###################
     def __init__(self, label, dueDate, priority, category, idNum):
         """
-        Initialize an Employee object
+        Initialize a ToDo object
 
         Parameters:
             label (string): title of the todo
-            dueDate (datetime date): todo due date
+            dueDate (string): todo due date string (MM/DD/YYYY)
             priority (string): todo completion priority
             category (string): todo category
             idNum (int): todo id number, assigned in order of creation 
         """
+        parsed_date = self._parse_date(dueDate)
+
+        # Validate the processed data (expects date object, not string)
+        validateAttributes(label, parsed_date, priority, category, idNum)
+
+        # Assign attributes if validation passed
         self.label = label
-        self.dueDate = self._parse_date(dueDate)
+        self.dueDate = parsed_date
         self.priority = priority
         self.category = category
         self.idNum = idNum
@@ -97,14 +133,25 @@ class ToDo():
         Returns:
             None or datetime date
         """
-        if not date_str or date_str.lower() in ["none", ""]:
+        # If it's already a date object, return it
+        if isinstance(date_str, (date, datetime)):
+            return date_str
+
+        # Allow explicit empty values (None, "None", "") to be valid None dates
+        if date_str is None:
             return None
+            
+        if isinstance(date_str, str):
+            if not date_str.strip() or date_str.lower() == "none":
+                return None
         
-        try:
-            return datetime.strptime(date_str.strip(), "%m/%d/%Y").date()
-        except ValueError:
-            print(f"Warning: Date string '{date_str}' is not in MM/DD/YYYY format. Storing as None.")
-            return None
+            try:
+                return datetime.strptime(date_str.strip(), "%m/%d/%Y").date()
+            except ValueError:
+                # If string exists but isn't a date, that's an error!
+                raise ValueError(f"Invalid date format: '{date_str}'. Use MM/DD/YYYY.")
+        
+        return None
 
     ###################
     # Editing Methods #
@@ -112,21 +159,20 @@ class ToDo():
     def editLabel(self, newVal):
         """
         Edit the label of an existing todo
-
-        Parameters:
-            newVal (string): new label to replace the old
         """
+        # Validate before saving
+        validateAttributes(newVal, self.dueDate, self.priority, self.category, self.idNum)
         self.label = newVal
         print(f"Label saved as {newVal}\n")
 
     def editDueDate(self, newVal):
         """
         Edit the due date of an existing todo
-
-        Parameters:
-            newVal (string): new due date to replace the old
         """
         new_date_obj = self._parse_date(newVal)
+        # Validate before saving
+        validateAttributes(self.label, new_date_obj, self.priority, self.category, self.idNum)
+        
         self.dueDate = new_date_obj
         date_display = new_date_obj.strftime("%m/%d/%Y") if new_date_obj else "N/A"
         print(f"Due Date saved as {date_display}\n")
@@ -134,29 +180,26 @@ class ToDo():
     def editPriority(self, newVal):
         """
         Edit the priority of an existing todo
-
-        Parameters:
-            newVal (int): value that corresponds to desired new priority from PRIORITYDICT
         """
-        self.priority = PRIORITYDICT[newVal]
-        print(f"Priority set to {PRIORITYDICT[newVal]}\n")
+        new_priority = PRIORITYDICT[newVal]
+        # Validate before saving
+        validateAttributes(self.label, self.dueDate, new_priority, self.category, self.idNum)
+        
+        self.priority = new_priority
+        print(f"Priority set to {new_priority}\n")
 
     def editCategory(self, newVal):
         """
         Edit the category of an existing todo
-
-        Parameters:
-            newVal (string): replacement category for the todo
         """
+        # Validate before saving
+        validateAttributes(self.label, self.dueDate, self.priority, newVal, self.idNum)
         self.category = newVal
         print(f"Category saved as {newVal}\n")
 
     def toggleComplete(self, choice):
         """
         Mark an existing todo as complete or ongoing
-
-        Parameters:
-            choice (int): 1 sets complete, 2 sets to ongoing
         """
         if (choice == 1):
             self.complete = True

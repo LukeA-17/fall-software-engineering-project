@@ -133,8 +133,13 @@ def changeCompletion(selection):
             )
 
             if choice in [0, 1, 2]:
-                curTodo.toggleComplete(choice)
-                return
+                if choice == 0:
+                    return
+                try:
+                    curTodo.toggleComplete(choice)
+                    return
+                except (ValueError, TypeError) as e:
+                    print(f"Error updating status: {e}\n")
             else:
                 print("Invalid choice. Select 0, 1, or 2.\n")
         except ValueError:
@@ -145,10 +150,13 @@ def createTodo():
     """Creates a new ToDo object from user input, appends to th.todoList"""
     # provide paste option
     while True:
-        doPaste = int(input("Paste copied task?\n(0: No, 1: Yes)\n"))
-        if doPaste in {0, 1}:
-            break
-        print("Input not recognized.\n")
+        try:
+            doPaste = int(input("Paste copied task?\n(0: No, 1: Yes)\n"))
+            if doPaste in {0, 1}:
+                break
+            print("Input not recognized.\n")
+        except ValueError:
+            print("Invalid input. Please enter 0 or 1.\n")
 
     if (doPaste == 1):
         copiedTask = th.copiedTask
@@ -159,13 +167,16 @@ def createTodo():
 
         date_str = copiedTask.dueDate
         label = (f"COPY: {copiedTask.label}")
-        dueDate = copiedTask.dueDate
+        dueDate = copiedTask.dueDate 
         priority = copiedTask.priority
         category = copiedTask.category
         idNum = len(th.todoList) + 1
 
-        th.todoList.append(todo.ToDo(label, dueDate, priority, category, idNum))
-        print(f"{label} added.\n")
+        try:
+            th.todoList.append(todo.ToDo(label, dueDate, priority, category, idNum))
+            print(f"{label} added.\n")
+        except (ValueError, TypeError) as e:
+            print(f"Error pasting task: {e}\n")
 
     if (doPaste == 0):
         while True:
@@ -199,8 +210,12 @@ def createTodo():
         category = input("Enter task category: ").strip()
         idNum = len(th.todoList) + 1
 
-        th.todoList.append(todo.ToDo(label, dueDate, priority, category, idNum))
-        print(f"{label} added.\n")
+        try:
+            new_task = todo.ToDo(label, dueDate, priority, category, idNum)
+            th.todoList.append(new_task)
+            print(f"{label} added.\n")
+        except (ValueError, TypeError) as e:
+            print(f"Error creating task: {e}\n")
 
 
 def editTodo(selection):
@@ -222,7 +237,7 @@ def editTodo(selection):
         ),
         4: ("Enter new category: ", lambda v: curTodo.editCategory(v)),
         5: (None, lambda _v: changeCompletion(selection)),
-        6: (None, lambda: th.copyTask)
+        6: (None, lambda _v: th.copyTask(curTodo))
     }
 
     while True:
@@ -248,7 +263,10 @@ def editTodo(selection):
                     print("Invalid priority choice.\n")
                     continue
             
-            editCall(newVal)
+            try:
+                editCall(newVal)
+            except (ValueError, TypeError) as e:
+                print(f"Error updating task: {e}\n")
 
         return
 
@@ -324,8 +342,12 @@ def startProgram():
     choice = None
 
     print("Welcome to Collaborative ToDo Manager Application (CTMA)!")
-    if th.loadSave():
-        print("Task amount exceeds allotted limit of 250 \nProgram Terminating")
+
+    try:
+        th.loadSave()
+    except ValueError as e:
+        print(f"Error: {e}")
+        print("Program Terminating")
         sys.exit()
 
     while choice != 0:
@@ -352,5 +374,9 @@ def startProgram():
         if choice == 6:
             searchTodo()
 
-    th.saveData()
+    try:
+        th.saveData()
+    except OSError as e:
+        print(f"Failed to save data: {e}")
+        
     print("\nThank you for using CTMA!")

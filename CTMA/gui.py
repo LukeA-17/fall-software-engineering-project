@@ -113,9 +113,10 @@ class CTMAGUI:
         self.current_category = None
         self.current_sort_key = "Priority"
 
-        # load save data from backend. Terminate program if more than 250 tasks
-        if th.loadSave():
-            messagebox.showinfo("Info Alert", "Task amount exceeds allotted limit of 250\nProgram Terminating")
+        try:
+            th.loadSave()
+        except ValueError as e:
+            messagebox.showerror("Critical Error", f"{e}\nProgram Terminating")
             self.master.destroy()
             sys.exit()
 
@@ -709,27 +710,27 @@ class CTMAGUI:
         """
         data = {k: v.get().strip() for k, v in self.current_task_vars.items()}
 
-        if not data["label"]:
-            messagebox.showerror("Error", "Task label cannot be empty.")
+        # The ToDo class handles parsing and validation internally when instantiated.
+        try:
+            idNum = len(th.todoList) + 1
+            new_task = th.todo.ToDo(
+                data["label"], 
+                data["dueDate"], 
+                data["priority"], 
+                data["category"], 
+                idNum
+            )
+            
+            # If no exception was raised, the task is valid
+            th.todoList.append(new_task)
+            messagebox.showinfo("Success", f"Task '{data['label']}' created successfully!")
+            self.load_home_page()
+            
+        except (ValueError, TypeError) as e:
+            # Catch the error message from validateAttributes and show a popup
+            messagebox.showerror("Validation Error", str(e))
             return
 
-        if data["dueDate"]:
-            try:
-                th.datetime.strptime(data["dueDate"], "%m/%d/%Y")
-            except ValueError:
-                messagebox.showerror(
-                    "Error", "Invalid date format. Use MM/DD/YYYY or leave blank."
-                )
-                return
-
-        idNum = len(th.todoList) + 1
-        new_task = th.todo.ToDo(
-            data["label"], data["dueDate"], data["priority"], data["category"], idNum
-        )
-        th.todoList.append(new_task)
-
-        messagebox.showinfo("Success", f"Task '{data["label"]}' created successfully!")
-        self.load_home_page()
 
     def _submit_task_update(self):
         """
@@ -738,29 +739,22 @@ class CTMAGUI:
         data = {k: v.get().strip() for k, v in self.current_task_vars.items()}
         task = self.editing_task
 
-        if not data["label"]:
-            messagebox.showerror("Error", "Task label cannot be empty.")
+        try:
+            priority_key = next(
+                (k for k, v in th.PRIORITYDICT.items() if v == data["priority"]), "1"
+            )
+
+            th.update_task_attributes(
+                task.idNum, data["label"], data["dueDate"], priority_key, data["category"]
+            )
+
+            messagebox.showinfo("Success", f"Task '{data['label']}' updated successfully!")
+            self.load_task_view_page(self.current_view_type, self.current_category)
+            
+        except (ValueError, TypeError) as e:
+            # Catch the error and show the user the specific problem
+            messagebox.showerror("Validation Error", str(e))
             return
-
-        if data["dueDate"]:
-            try:
-                th.datetime.strptime(data["dueDate"], "%m/%d/%Y")
-            except ValueError:
-                messagebox.showerror(
-                    "Error", "Invalid date format. Use MM/DD/YYYY or leave blank."
-                )
-                return
-
-        priority_key = next(
-            (k for k, v in th.PRIORITYDICT.items() if v == data["priority"]), "1"
-        )
-
-        th.update_task_attributes(
-            task.idNum, data["label"], data["dueDate"], priority_key, data["category"]
-        )
-
-        messagebox.showinfo("Success" f"Task '{data["label"]}' updated successfully!")
-        self.load_task_view_page(self.current_view_type, self.current_category)
 
     def _confirm_delete_task(self):
         """
