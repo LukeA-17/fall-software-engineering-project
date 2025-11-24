@@ -2,8 +2,8 @@
 todo_handler.py acts as the logic layer of the program
 Functions:
     System:
-    - loadSave(): loads save data from tasks.json
-    - saveData(): saves runtime todos into tasks.json
+    - loadSave(): loads save data from tasks.json and settings.json
+    - saveData(): saves runtime data into tasks.json and settings.json
     - search(term): creates a list of todo items containing a certain string
 
     GUI Support:

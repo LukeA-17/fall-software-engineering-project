@@ -1,3 +1,42 @@
+"""
+gui.py presents the GUI, allowing for user interaction
+
+Functions:
+Class Management:
+- set_styles(master, theme): Sets up custom styles and themes for the application widgets.
+- CTMAGUI.__init__(master): Initializes the GUI, loads backend data, and displays the home page.
+- CTMAGUI.clear_frame(): Removes all widgets from the main frame to clear the current page view.
+- CTMAGUI.create_top_bar(parent, page_title): Creates the consistent top navigation bar with date and home controls.
+- CTMAGUI.create_bottom_bar(parent): Creates the consistent bottom control bar with settings and exit buttons.
+- CTMAGUI.create_view_button(parent, text, row, col, command): Helper to create and place main view buttons on the homepage.
+
+Page Creation:
+- CTMAGUI.load_home_page(): Creates and displays the dashboard with task status and category summaries.
+- CTMAGUI.load_task_view_page(view_type, category): Loads the scrollable task list, filtered by status or category.
+- CTMAGUI.load_create_task_page(): Displays the form interface for creating a new task.
+- CTMAGUI.load_edit_task_page(task): Displays the form interface pre-filled with existing data for editing a task.
+- CTMAGUI.load_settings_page(): Loads the settings page
+
+Task Rendering:
+- CTMAGUI.update_task_list_sort(new_sort_key): Updates the current sorting key and redraws the task list.
+- CTMAGUI.update_task_list(): Clears and redraws tasks based on the current filters and sort order.
+- CTMAGUI.draw_task_row(parent, task): Renders a single task row with priority styling and controls.
+- CTMAGUI._create_task_form_widgets(parent_frame, is_new_task, task_id): Helper to draw common form fields for creating/editing tasks.
+- CTMAGUI._create_form_row(parent_frame, label_text, row_num, textvariable): Helper to create a standard label and entry layout.
+
+Task Interaction:
+- CTMAGUI._submit_new_task_creation(): Validates form data and creates a new task in the backend.
+- CTMAGUI._submit_task_update(): Validates form data and updates an existing task's attributes.
+- CTMAGUI._confirm_delete_task(): Prompts the user for confirmation before deleting a task.
+- CTMAGUI.copy_task(task): Copies a task object to the backend clipboard.
+- CTMAGUI.paste_task(): Fills the current form with data from the previously copied task.
+- CTMAGUI._get_unique_categories(): Returns a sorted list of unique categories from existing tasks.
+
+System:
+- CTMAGUI.exit_app(): Saves application data and destroys the window.
+- start_gui(): Initializes the main Tkinter root and starts the event loop.
+"""
+
 import tkinter as tk
 from tkinter import ttk, messagebox
 import todo_handler as th
