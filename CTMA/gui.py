@@ -38,7 +38,7 @@ System:
 """
 
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, filedialog, simpledialog
 import todo_handler as th
 from datetime import date
 import sys
@@ -473,7 +473,7 @@ class CTMAGUI:
             "dueDate": tk.StringVar(value=date_str),
             "priority": tk.StringVar(value=task.priority),
             "category": tk.StringVar(value=task.category),
-            "people": tk.StringVar(value=people_str), # Pre-fill people
+            "people": tk.StringVar(value=people_str),
         }
 
         self._create_task_form_widgets(form_frame, is_new_task=False)
@@ -484,7 +484,7 @@ class CTMAGUI:
             text="Copy Task",
             command=lambda:self.copy_task(task),
             style="HomePage.TButton",
-        ).grid(row=5, column=0, pady=(10, 5), sticky="w") # Moved to row 5 for layout
+        ).grid(row=6, column=0, pady=(10, 5), sticky="w")
 
         # delete and save/discard
         ttk.Button(
@@ -492,7 +492,7 @@ class CTMAGUI:
             text="Delete Task",
             command=self._confirm_delete_task,
             style="HomePage.TButton",
-        ).grid(row=5, column=9, columnspan=2, pady=(10, 5)) # Moved to row 5
+        ).grid(row=6, column=9, columnspan=2, pady=(10, 5))
 
         button_frame = ttk.Frame(self.main_frame)
         button_frame.pack(fill="x", pady=10)
@@ -511,49 +511,164 @@ class CTMAGUI:
         self.create_bottom_bar(self.main_frame)
     
     def load_settings_page(self):
-        """
-        Loads the Settings Page.
-        """
-        # Initial construction
-        self.clear_frame()
-        self.create_top_bar(self.main_frame, page_title="Settings")
-        settings_frame = ttk.Frame(self.main_frame)
-        settings_frame.pack()
+            """
+            Loads the Settings Page
+            """
+            ##### Initial construction #####
+            self.clear_frame()
+            self.create_top_bar(self.main_frame, page_title="Settings")
 
-        # Add elements
-        ttk.Label(
-            settings_frame,
-            text="Theme Selection:",
-            font=("Arial", 11, "bold")
-        ).pack(anchor="w", pady=(0, 5))
+            settings_frame = ttk.Frame(self.main_frame)
 
-        # Combobox
-        self.selected_theme = tk.StringVar()
+            ##### Theme Section #####
+            # Theme Selection Label
+            ttk.Label(
+                settings_frame,
+                text="Theme Selection:",
+                font=("Arial", 11, "bold")
+            ).pack(anchor="w", pady=(0, 5))
 
-        combo = ttk.Combobox(
-            settings_frame,
-            textvariable=self.selected_theme,
-            values=["UVU", "Dark", "Light"],
-            state="readonly"
-        )
-        combo.pack(anchor="w", pady=(0, 10))
-        self.selected_theme.set(th.curTheme)
+            # Theme Combobox
+            self.selected_theme = tk.StringVar()
 
-        # Save button
-        def on_save():
-            new_theme = self.selected_theme.get()
-            th.curTheme = new_theme
-            set_styles(self.master, new_theme)
-            messagebox.showinfo("Info Alert", "Settings Saved Succesfully!")
+            themeCombo = ttk.Combobox(
+                settings_frame,
+                textvariable=self.selected_theme,
+                values=["UVU", "Dark", "Light"],
+                state="readonly"
+            )
+            
+            themeCombo.pack(anchor="w", pady=(0, 10), fill="x")
+            self.selected_theme.set(th.curTheme)
 
-        ttk.Button(
-            settings_frame,
-            text="Save",
-            command=on_save
-        ).pack(anchor="e", pady=(10, 0))
+            ##### Profile Management #####
+            # Profile Label
+            ttk.Label(
+                settings_frame,
+                text="Profiles:",
+                font=("Arial", 11, "bold")
+            ).pack(anchor="w", pady=(10, 5))
 
-        # Bottom bar
-        self.create_bottom_bar(self.main_frame)
+            # Profile Combobox
+            self.selected_profile = tk.StringVar()
+
+            profileCombo = ttk.Combobox(
+                settings_frame,
+                textvariable=self.selected_profile,
+                values=list(th.fileDict.keys()),
+                state="readonly"
+            )
+            profileCombo.pack(anchor="w", pady=(0, 5), fill="x")
+            self.selected_profile.set("Default")
+
+            # Profile Logic Functions 
+            def add_profile_logic():
+                # Select File Path
+                file_path = filedialog.askopenfilename(title="Select Profile File")
+
+                if not file_path:
+                    return
+                if not file_path.lower().endswith(".json"):
+                                messagebox.showerror("Invalid File", "Please select a valid .json file.")
+                                return
+
+                # Name Profile
+                profile_name = simpledialog.askstring(
+                    "Profile Name", 
+                    "Enter a name for this profile:"
+                )
+
+                if profile_name:
+                    if profile_name in th.fileDict:
+                        messagebox.showwarning("Error", "A profile with this name already exists.")
+                        return
+                    
+                    # Save to backend and update UI
+                    th.fileDict[profile_name] = file_path
+                    profileCombo['values'] = list(th.fileDict.keys())
+                    self.selected_profile.set(profile_name)
+                    messagebox.showinfo("Success", f"Profile '{profile_name}' added.")
+
+            def delete_profile_logic():
+                target = self.selected_profile.get()
+                if not target:
+                    messagebox.showwarning("Selection Error", "Please select a profile to delete.")
+                    return
+
+                confirm = messagebox.askyesno(
+                    "Confirm Delete", 
+                    f"Are you sure you want to delete profile '{target}'?"
+                )
+                
+                if confirm:
+                    if target == "Default":
+                        messagebox.showinfo("Error", "You may not remove the default profile.")
+                        return
+                    
+                    del th.fileDict[target]
+                    profileCombo['values'] = list(th.fileDict.keys())
+                    self.selected_profile.set("") # Clear selection
+                    messagebox.showinfo("Deleted", "Profile deleted successfully.")
+                    self.load_home_page()
+
+            def apply_profile_logic():
+                target = self.selected_profile.get()
+                if not target: return
+                try:
+                    th.changeProfile(target)
+                    messagebox.showinfo("Success", f"Profile switched to {target}")
+                    self.load_home_page()
+                except ValueError as e:
+                    messagebox.showerror("Error", str(e))
+
+            # Profile Buttons Frame
+            # Create a sub-frame to hold the three buttons side-by-side
+            btn_frame = ttk.Frame(settings_frame)
+            btn_frame.pack(fill="x", pady=(0, 5))
+
+            # Add Profile Button
+            ttk.Button(
+                btn_frame,
+                text="Add Profile",
+                command=add_profile_logic
+            ).pack(side="left", expand=True, fill="x", padx=(0, 5))
+
+            # Delete Profile Button
+            ttk.Button(
+                btn_frame,
+                text="Delete Profile",
+                command=delete_profile_logic
+            ).pack(side="left", expand=True, fill="x", padx=(0, 5))
+
+            # Apply Profile Button
+            ttk.Button(
+                btn_frame,
+                text="Apply Profile",
+                command=apply_profile_logic
+            ).pack(side="left", expand=True, fill="x", padx=(0, 0))
+
+            ##### Save Settings Logic #####
+            def on_save():
+                new_theme = self.selected_theme.get()
+                
+                # Save theme
+                th.curTheme = new_theme
+                set_styles(self.master, new_theme)
+                                
+                messagebox.showinfo("Info Alert", "Settings Saved Successfully!")
+
+            ##### Main Save Button #####
+            ttk.Button(
+                settings_frame,
+                text="Save Settings",
+                command=on_save
+            ).pack(pady=(10, 0), fill="x")
+
+            ##### Bottom bar #####
+            self.create_bottom_bar(self.main_frame)
+
+            ##### Render Frame #####
+            settings_frame.pack(fill="x", padx=50)
 
 
     # =========================================

@@ -12,6 +12,7 @@ Functions:
 """
 
 import json
+import sys
 import todo as todo
 from datetime import date, datetime
 
@@ -19,7 +20,7 @@ from datetime import date, datetime
 #####################
 # Handler Variables #
 #####################
-# mapping of numbers to priorities
+# constants
 PRIORITYDICT = {
     "1": "None",
     "2": "Low",
@@ -27,8 +28,12 @@ PRIORITYDICT = {
     "4": "High"  
 }
 
+# runtime vars
 todoList = [] # stores todo objects during runtime
 curTheme = "Dark"
+
+fileDict = {"Default": r"CTMA\tasks.json"}
+curFile = fileDict["Default"]
 
 copiedTask: todo.ToDo = None
 
@@ -44,8 +49,18 @@ def loadSave():
         ValueError: If save file is corrupt, contains invalid data, OR exceeds 250 tasks.
     """
     # Load the todoList
+    global todoList
+    global fileDict
+    global curFile
+
+    todoList = []
+
+    if not fileDict:
+        fileDict = {"Default": r"CTMA\tasks.json"}
+        curFile = fileDict["Default"]
+
     try:
-        with open(r"CTMA\tasks.json", "r") as f:
+        with open(curFile, "r") as f:
             data = json.load(f)
     except FileNotFoundError:
         data = {}
@@ -82,9 +97,15 @@ def loadSave():
     try:
         with open(r"CTMA\settings.json", "r") as f:
             data = json.load(f)
+
         if "theme" in data:
             global curTheme
             curTheme = data["theme"]
+
+        if "files" in data:
+            fileDict.clear()
+            fileDict = data["files"]
+
         else:
             curTheme = "UVU"
             
@@ -92,6 +113,7 @@ def loadSave():
         pass # Settings optional
     except json.JSONDecodeError as e:
          raise ValueError(f"Critical Error: Corrupt settings file. {e}")
+    print("E")
 
 
 def saveData():
@@ -116,19 +138,26 @@ def saveData():
         }
 
     try:
-        with open(r"CTMA\tasks.json", "w") as f:
+        with open(curFile, "w") as f:
             json.dump(todoDict, f, indent = 4)
     except Exception as e:
         raise OSError(f"Critical Save Error: Failed to save tasks.json: {e}")
 
+    # save system
     global curTheme
-    settingsDict = { "theme": curTheme }
+    global fileDict
+    
+    settingsDict = {
+        "theme": curTheme,
+        "files": fileDict
+        }
     
     try:
         with open(r"CTMA\settings.json", "w") as f:
             json.dump(settingsDict, f, indent = 4)
     except Exception as e:
         raise OSError(f"Critical Save Error: Failed to save settings.json: {e}")
+    print("E")
 
 
 def search(term):
@@ -158,6 +187,16 @@ def copyTask(task):
         copiedTask = todo.ToDo(task.label, task.dueDate, task.priority, task.category, list(task.people), task.idNum)
     else:
         raise ValueError("Cannot copy empty task.")
+
+def changeProfile(profileName):
+    try:
+        global curFile
+        global fileDict
+        saveData()
+        curFile = fileDict[profileName]
+        loadSave()
+    except (ValueError, TypeError) as e:
+        raise ValueError(f"Critical Error Loading Profile {profileName}: {e}")
 
 
 #######################

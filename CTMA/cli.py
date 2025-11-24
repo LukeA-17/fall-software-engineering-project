@@ -16,8 +16,10 @@ Functions:
  - searchTodo(): Prompts user for a search term and displays matches
 
  System:
- - def displayOptions(): Displays main menu options. Returns a valid integer choice
- - def startProgram(): Start the loop that allows user interaction
+ - viewProfiles(): Prints a list of all currently available profiles
+ - manageProfiles(): Handles adding, deleting, and switching between save profiles
+ - displayOptions(): Displays main menu options. Returns a valid integer choice
+ - startProgram(): Start the loop that allows user interaction
 """
 
 import todo as todo
@@ -319,6 +321,100 @@ def searchTodo():
 ####################
 # System functions #
 ####################
+def viewProfiles():
+    """Prints list of currently available profiles"""
+    # Determine current profile name by matching path in fileDict
+    current_name = "Unknown"
+    for name, path in th.fileDict.items():
+        if path == th.curFile:
+            current_name = name
+            break
+
+    print("\nProfile Management:")
+    print(f"Current Profile: {current_name} ({th.curFile})")
+    print("Available Profiles:")
+    for name, path in th.fileDict.items():
+        print(f"  - {name}: {path}")
+
+def manageProfiles():
+    """Menu for managing save profiles (Multi-file support)"""
+    while True:
+        viewProfiles() # Show list on start of loop
+
+        try:
+            choice = int(input(
+                "\nSelect an option:\n"
+                "0: Back to Main Menu\n"
+                "1: Switch Profile\n"
+                "2: Add Profile\n"
+                "3: Delete Profile\n"
+                "4: View Profiles\n"
+            ))
+        except ValueError:
+            print("Invalid input. Please enter a number.\n")
+            continue
+
+        if choice == 0:
+            return
+        
+        elif choice == 1:
+            target = input("Enter the name of the profile to switch to: ").strip()
+            if target in th.fileDict:
+                try:
+                    th.changeProfile(target)
+                    print(f"Successfully switched to profile: {target}\n")
+                except ValueError as e:
+                    print(f"Error switching profile: {e}\n")
+            else:
+                print("Profile not found.\n")
+
+        elif choice == 2:
+            name = input("Enter new profile name: ").strip()
+            if not name:
+                print("Name cannot be empty.\n")
+                continue
+            if name in th.fileDict:
+                print("A profile with that name already exists.\n")
+                continue
+            
+            # Note: User must enter a relative or absolute path manually in CLI
+            path = input(r"Enter file path (e.g., CTMA\school.json): ").strip()
+            if not path.lower().endswith(".json"):
+                print("File must be a .json file.\n")
+                continue
+            
+            th.fileDict[name] = path
+            print(f"Profile '{name}' added. Switch to it to create the file if it doesn't exist.\n")
+
+        elif choice == 3:
+            target = input("Enter the name of the profile to delete: ").strip()
+            if target == "Default":
+                print("Cannot delete the Default profile.\n")
+                continue
+            
+            if target in th.fileDict:
+                confirm = input(f"Are you sure you want to delete profile '{target}'? (y/n): ").lower()
+                if confirm == 'y':
+                    del th.fileDict[target]
+                    # If we deleted the current profile, switch to Default
+                    if target == th.curFile: # Check if deleted path was current
+                         print("Current profile deleted. Switching to Default...")
+                         try:
+                            th.changeProfile("Default")
+                         except:
+                            pass
+                    print(f"Profile '{target}' deleted.\n")
+            else:
+                print("Profile not found.\n")
+
+        elif choice == 4:
+            viewProfiles()
+            input("Press Enter to continue...")
+        
+        else:
+            print("Invalid option.\n")
+
+
 def displayOptions():
     """
     Displays main menu options. Returns a valid integer choice.
@@ -335,10 +431,11 @@ def displayOptions():
                     f"4: Change a task's completion\n"
                     f"5: View tasks\n"
                     f"6: Search tasks\n"
+                    f"7: Manage Profiles\n"
                 )
             )
 
-            if 0 <= choice <= 6:
+            if 0 <= choice <= 7:
                 print()
                 return choice
             else:
@@ -383,6 +480,9 @@ def startProgram():
 
         if choice == 6:
             searchTodo()
+            
+        if choice == 7:
+            manageProfiles()
 
     try:
         th.saveData()
