@@ -61,6 +61,7 @@ def loadSave():
                     item.get("dueDate"),
                     item.get("priority"),
                     item.get("category"),
+                    item.get("people", []), # Default to empty list
                     (len(todoList) + 1)
                 )
                 
@@ -96,7 +97,7 @@ def loadSave():
 def saveData():
     """
     Turns todoList into a dict, stores that dict into tasks.json
-    
+
     Raises:
         OSError: If saving to disk fails.
     """
@@ -109,6 +110,7 @@ def saveData():
             "dueDate": date_str,
             "priority": t.priority,
             "category": t.category,
+            "people": t.people, # Save list of people
             "complete": t.complete,
             "status": t.status
         }
@@ -119,11 +121,8 @@ def saveData():
     except Exception as e:
         raise OSError(f"Critical Save Error: Failed to save tasks.json: {e}")
 
-    # Save settings
     global curTheme
-    settingsDict = {
-        "theme": curTheme
-        }
+    settingsDict = { "theme": curTheme }
     
     try:
         with open(r"CTMA\settings.json", "w") as f:
@@ -155,7 +154,8 @@ def copyTask(task):
     """Duplicates a task. Raises ValueError if task is None."""
     global copiedTask
     if task:
-        copiedTask = todo.ToDo(task.label, task.dueDate, task.priority, task.category, task.idNum)
+        # Copy people list (using list() to ensure it's a new reference)
+        copiedTask = todo.ToDo(task.label, task.dueDate, task.priority, task.category, list(task.people), task.idNum)
     else:
         raise ValueError("Cannot copy empty task.")
 
@@ -204,12 +204,10 @@ def get_tasks_for_view(view_type="All", category=None, sort_key="Priority", reve
         return filtered_tasks
 
 
-def update_task_attributes(task_id, label, dueDate, priority_key, category):
+def update_task_attributes(task_id, label, dueDate, priority_key, category, people):
     """
     Updates the attributes of a ToDo object found by its ID.
-    Raises IndexError if task_id not found.
     """
-    # This will raise IndexError if ID is invalid, letting caller handle the error
     curTodo = todoList[task_id - 1]
 
     if curTodo.label != label:
@@ -224,5 +222,9 @@ def update_task_attributes(task_id, label, dueDate, priority_key, category):
 
     if curTodo.category != category:
         curTodo.editCategory(category)
+    
+    # Check if people list changed
+    if curTodo.people != people:
+        curTodo.editPeople(people)
 
     return True

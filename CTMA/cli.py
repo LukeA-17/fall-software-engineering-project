@@ -82,9 +82,9 @@ def selectTodo():
 
 
 def selectEditChoice(curTodo):
-    """Accepts a todo object, and prompts user to select attribute to edit.
-    Returns int of attribute selection."""
-    while True:  # loop until valid input returns
+    """Accepts a todo object, and prompts user to select attribute to edit. Returns int of attribute selection."""
+    people_str = ", ".join(curTodo.people) if curTodo.people else "None"
+    while True: 
         try:
             editChoice = int(
                 input(
@@ -94,16 +94,17 @@ def selectEditChoice(curTodo):
                     f"2: Due Date - Current: {curTodo.dueDate}\n"
                     f"3: Priority - Current: {curTodo.priority}\n"
                     f"4: Category - Current: {curTodo.category}\n"
-                    f"5: Completion - Current: {curTodo.status}\n"
-                    f"6: Copy Task\n"
+                    f"5: People - Current: {people_str}\n"
+                    f"6: Completion - Current: {curTodo.status}\n"
+                    f"7: Copy Task\n"
                 )
             )
-            if 0 <= editChoice <= 6:
+            if 0 <= editChoice <= 7:
                 print()
                 return editChoice
             else:
-                print("Invalid choice. Please enter a number between 0 and 5.\n")
-        except ValueError:  # couldn't convert to int
+                print("Invalid choice. Please enter a number between 0 and 7.\n")
+        except ValueError:
             print("Invalid input. Please enter a number.\n")
 
 
@@ -165,15 +166,15 @@ def createTodo():
             print("Paste Error: No task has been copied yet.\n")
             return
 
-        date_str = copiedTask.dueDate
         label = (f"COPY: {copiedTask.label}")
         dueDate = copiedTask.dueDate 
         priority = copiedTask.priority
         category = copiedTask.category
+        people = list(copiedTask.people) # Copy list
         idNum = len(th.todoList) + 1
 
         try:
-            th.todoList.append(todo.ToDo(label, dueDate, priority, category, idNum))
+            th.todoList.append(todo.ToDo(label, dueDate, priority, category, people, idNum))
             print(f"{label} added.\n")
         except (ValueError, TypeError) as e:
             print(f"Error pasting task: {e}\n")
@@ -208,10 +209,15 @@ def createTodo():
                 print("Invalid priority choice.\n")
 
         category = input("Enter task category: ").strip()
+        
+        # Process people input string into list
+        people_input = input("Enter people involved (comma separated): ")
+        people = [p.strip() for p in people_input.split(",") if p.strip()]
+        
         idNum = len(th.todoList) + 1
 
         try:
-            new_task = todo.ToDo(label, dueDate, priority, category, idNum)
+            new_task = todo.ToDo(label, dueDate, priority, category, people, idNum)
             th.todoList.append(new_task)
             print(f"{label} added.\n")
         except (ValueError, TypeError) as e:
@@ -236,8 +242,9 @@ def editTodo(selection):
             lambda v: curTodo.editPriority(v),
         ),
         4: ("Enter new category: ", lambda v: curTodo.editCategory(v)),
-        5: (None, lambda _v: changeCompletion(selection)),
-        6: (None, lambda _v: th.copyTask(curTodo))
+        5: ("Enter people involved (comma separated): ", lambda v: curTodo.editPeople([p.strip() for p in v.split(",") if p.strip()])),
+        6: (None, lambda _v: changeCompletion(selection)),
+        7: (None, lambda _v: th.copyTask(curTodo))
     }
 
     while True:
@@ -247,12 +254,15 @@ def editTodo(selection):
 
         prompt, editCall = editOptions.get(editChoice, (None, None))
 
-        if editChoice == 6:
-            th.copyTask(curTodo)
-            print(f"{curTodo.label} copied.\n")
+        if editChoice == 7:
+            try:
+                th.copyTask(curTodo)
+                print(f"{curTodo.label} copied.\n")
+            except ValueError as e:
+                print(f"Copy Error: {e}\n")
             continue
         
-        elif editChoice == 5:
+        elif editChoice == 6:
             editCall(None)
             
         elif prompt:

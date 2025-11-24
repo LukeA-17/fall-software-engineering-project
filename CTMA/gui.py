@@ -107,6 +107,9 @@ class CTMAGUI:
         """
         self.master = master
         master.title("CTMA - Collaborative ToDo Manager")
+        
+        # Set a default window size
+        master.geometry("600x600")
 
         # application state variables for task filtering and sorting
         self.current_view_type = "All"
@@ -166,20 +169,23 @@ class CTMAGUI:
             side="left", anchor="nw", padx=(0, 10)
         )
 
-        # optional page title
+        # optional page title or centered date
         if page_title:
             ttk.Label(top_frame, text=page_title, font=("Arial", 14, "bold")).pack(
                 side="left", padx=20, fill="x", expand=True
             )
         else:
-            ttk.Label(
-            top_frame,
-            text=f"Current Date: {today}",
-            font=("Arial", 12, "bold"),
-            relief="solid",
-            borderwidth=1,
-            padding=5,
-            ).pack(side="left", anchor="nw")
+            lbl = ttk.Label(
+                top_frame,
+                text=f"Current Date: {today}",
+                font=("Arial", 12, "bold"),
+                relief="solid",
+                borderwidth=1,
+                padding=5,
+                anchor="center" # Center text inside label
+            )
+            # Pack it to fill available space between left and right buttons
+            lbl.pack(side="left", expand=True, padx=20)
 
         # add task button
         ttk.Button(
@@ -398,6 +404,7 @@ class CTMAGUI:
             "dueDate": tk.StringVar(),
             "priority": tk.StringVar(value=th.PRIORITYDICT["1"]),  # default to None
             "category": tk.StringVar(),
+            "people": tk.StringVar(),
         }
 
         self._create_task_form_widgets(form_frame, is_new_task=True)
@@ -459,11 +466,14 @@ class CTMAGUI:
 
         # pre-fill form variables
         date_str = task.dueDate.strftime("%m/%d/%Y") if task.dueDate else ""
+        people_str = ", ".join(task.people) if task.people else "" # Convert list to string for display
+
         self.current_task_vars = {
             "label": tk.StringVar(value=task.label),
             "dueDate": tk.StringVar(value=date_str),
             "priority": tk.StringVar(value=task.priority),
             "category": tk.StringVar(value=task.category),
+            "people": tk.StringVar(value=people_str), # Pre-fill people
         }
 
         self._create_task_form_widgets(form_frame, is_new_task=False)
@@ -474,7 +484,7 @@ class CTMAGUI:
             text="Copy Task",
             command=lambda:self.copy_task(task),
             style="HomePage.TButton",
-        ).grid(row=4, column=0, pady=(10, 5), sticky="w")
+        ).grid(row=5, column=0, pady=(10, 5), sticky="w") # Moved to row 5 for layout
 
         # delete and save/discard
         ttk.Button(
@@ -482,7 +492,7 @@ class CTMAGUI:
             text="Delete Task",
             command=self._confirm_delete_task,
             style="HomePage.TButton",
-        ).grid(row=4, column=9, columnspan=2, pady=(10, 5))
+        ).grid(row=5, column=9, columnspan=2, pady=(10, 5)) # Moved to row 5
 
         button_frame = ttk.Frame(self.main_frame)
         button_frame.pack(fill="x", pady=10)
@@ -673,6 +683,10 @@ class CTMAGUI:
         self._create_form_row(
             parent_frame, "Category:", 3, self.current_task_vars["category"]
         )
+        
+        self._create_form_row(
+            parent_frame, "People Involved (comma separated):", 4, self.current_task_vars["people"]
+        )
 
         priority_options = list(th.PRIORITYDICT.values())
         ttk.Label(parent_frame, text="Priority:").grid(
@@ -710,6 +724,9 @@ class CTMAGUI:
         """
         data = {k: v.get().strip() for k, v in self.current_task_vars.items()}
 
+        # Process people string into list
+        people_list = [p.strip() for p in data["people"].split(",") if p.strip()]
+
         # The ToDo class handles parsing and validation internally when instantiated.
         try:
             idNum = len(th.todoList) + 1
@@ -717,7 +734,8 @@ class CTMAGUI:
                 data["label"], 
                 data["dueDate"], 
                 data["priority"], 
-                data["category"], 
+                data["category"],
+                people_list, # Pass people list
                 idNum
             )
             
@@ -739,13 +757,21 @@ class CTMAGUI:
         data = {k: v.get().strip() for k, v in self.current_task_vars.items()}
         task = self.editing_task
 
+        # Process people string into list
+        people_list = [p.strip() for p in data["people"].split(",") if p.strip()]
+
         try:
             priority_key = next(
                 (k for k, v in th.PRIORITYDICT.items() if v == data["priority"]), "1"
             )
 
             th.update_task_attributes(
-                task.idNum, data["label"], data["dueDate"], priority_key, data["category"]
+                task.idNum, 
+                data["label"], 
+                data["dueDate"], 
+                priority_key, 
+                data["category"],
+                people_list # Pass people list
             )
 
             messagebox.showinfo("Success", f"Task '{data['label']}' updated successfully!")
@@ -795,10 +821,14 @@ class CTMAGUI:
             return
 
         date_str = copied_task.dueDate
+        # Added handling for people list paste
+        people_str = ", ".join(copied_task.people) if copied_task.people else ""
+
         self.current_task_vars["label"].set(f"COPY: {copied_task.label}")
         self.current_task_vars["dueDate"].set(date_str)
         self.current_task_vars["priority"].set(copied_task.priority) 
         self.current_task_vars["category"].set(copied_task.category)
+        self.current_task_vars["people"].set(people_str)
         
         messagebox.showinfo("Success", f"Task data copied from '{copied_task.label}'.")
 
@@ -823,7 +853,12 @@ class CTMAGUI:
         """
         Saves all task data and closes the application window
         """
-        th.saveData()
+        # th.saveData() now raises OSError if saving fails.
+        try:
+            th.saveData()
+        except OSError as e:
+            messagebox.showerror("Save Error", f"Could not save data: {e}")
+            
         self.master.destroy()
         print("\nThank you for using CTMA!")
 
