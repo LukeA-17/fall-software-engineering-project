@@ -69,8 +69,8 @@ To be updated
 ### 5. 🟢 [Snake case vs Camel Case](https://github.com/LukeA-17/fall-software-engineering-project/issues/5)
 - Addressed via issue [reply](https://github.com/LukeA-17/fall-software-engineering-project/issues/5#issuecomment-3399048354)
 
-### 6. 🟡 [if statements in user_flow.py](https://github.com/LukeA-17/fall-software-engineering-project/issues/6)
-- In progress
+### 6. 🟢 [if statements in user_flow.py](https://github.com/LukeA-17/fall-software-engineering-project/issues/6)
+- Code has been restructured and user_flow.py no longer exists
 
 ### 7. 🟢 [No design document](https://github.com/LukeA-17/fall-software-engineering-project/issues/7)
 - Initially addressed in commit [9cdd384](https://github.com/LukeA-17/fall-software-engineering-project/commit/9cdd3845a66e294be5ed38f0a42f5fb788d1262d)
@@ -80,8 +80,8 @@ To be updated
 - Initially addressed in commit [9cdd384](https://github.com/LukeA-17/fall-software-engineering-project/commit/9cdd3845a66e294be5ed38f0a42f5fb788d1262d)
 - Further addressed in commit [7e050cf](https://github.com/LukeA-17/fall-software-engineering-project/commit/7e050cf463f9ed5683e4eebe5973e92367e0caff)
 
-### 9. 🟡 [Missing test_cases.md document](https://github.com/LukeA-17/fall-software-engineering-project/issues/9)
-- In progress
+### 9. 🟢 [Missing test_cases.md document](https://github.com/LukeA-17/fall-software-engineering-project/issues/9)
+- Addressed in commit [fd319b7](https://github.com/LukeA-17/fall-software-engineering-project/commit/fd319b7e1ca30ad2ca42e58c7d6016fdae3e322b)
 
 ### 10. 🟡 [Missing team video](https://github.com/LukeA-17/fall-software-engineering-project/issues/10)
 - In progress
@@ -89,8 +89,8 @@ To be updated
 ### 11. 🟢 [Missing AI log](https://github.com/LukeA-17/fall-software-engineering-project/issues/11)
 - Addressed in commit [149115c](https://github.com/LukeA-17/fall-software-engineering-project/commit/149115c3e06d53f89c0cdfaeebfe581576873fc3) and [e352e0f](https://github.com/LukeA-17/fall-software-engineering-project/commit/e352e0fc74602a07ac4155cd9238262ecfe50c8b)
 
-### 12. 🟡 [How many test cases do you have?](https://github.com/LukeA-17/fall-software-engineering-project/issues/12)
-- In progress
+### 12. 🟢 [How many test cases do you have?](https://github.com/LukeA-17/fall-software-engineering-project/issues/12)
+- Addressed in commit [f6ab7e0](https://github.com/LukeA-17/fall-software-engineering-project/commit/f6ab7e0163bb3d6ceb6d6a1dd05cbfc678129f53)
 
 ### 13. 🟡 [Incomplete README file](https://github.com/LukeA-17/fall-software-engineering-project/issues/13)
 - Initially addressed in commits [feefc35](https://github.com/LukeA-17/fall-software-engineering-project/commit/feefc35a2dd2a885a128f64f8bd5adf242e46c91), [6bc2b02](https://github.com/LukeA-17/fall-software-engineering-project/commit/6bc2b02cc055311d6e23e9a003de698b6b5bc823), and [3beb20e](https://github.com/LukeA-17/fall-software-engineering-project/commit/3beb20e76be3840e46e6b7bd4e8f26d84c652275)
@@ -117,8 +117,8 @@ To be updated
 ### 20. 🟡 [Issues from Milestone 2 some not closed](https://github.com/LukeA-17/fall-software-engineering-project/issues/20)
 - In progress
 
-### 21. 🟡 [Test Case Doc exists but is empty](https://github.com/LukeA-17/fall-software-engineering-project/issues/21)
-- In progress
+### 21. 🟢 [Test Case Doc exists but is empty](https://github.com/LukeA-17/fall-software-engineering-project/issues/21)
+- Addressed in commit [fd319b7](https://github.com/LukeA-17/fall-software-engineering-project/commit/fd319b7e1ca30ad2ca42e58c7d6016fdae3e322b)
 
 ### 22. 🟡 [Modifications from Previous Milestone](https://github.com/LukeA-17/fall-software-engineering-project/issues/22)
 - In progress
@@ -152,3 +152,6 @@ To be updated
 
 ### 32. 🟢 [Results](https://github.com/LukeA-17/fall-software-engineering-project/issues/32)
 - Score feedback, no action needed
+
+### 34. 🟢 [File Path Support for Different Platforms](https://github.com/LukeA-17/fall-software-engineering-project/issues/34)
+- Addressed in commit [dee7a1c](https://github.com/LukeA-17/fall-software-engineering-project/commit/dee7a1ca61ca9bf95d5247367384e274645aef98)
