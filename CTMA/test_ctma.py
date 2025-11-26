@@ -5,6 +5,7 @@ test cases for each CLI use case in the design document.
 
 import pytest
 import json
+import os
 from unittest.mock import patch, MagicMock, mock_open
 
 import todo as todo
@@ -99,14 +100,14 @@ def test_handler_create_task_success(load_mock_tasks):
 
 def test_handler_create_task_failure_invalid_date():
     """
-    Checks that creating a task with an invalid date string results in dueDate being None.
+    Checks that creating a task with an invalid date string raises a ValueError.
 
     Use Case: User attempts to create a task with an invalid date format.
     Inputs: Due Date: "12-01-2025" (invalid format)
-    Expected Output: dueDate attribute is None.
+    Expected Output: ValueError is raised.
     """
-    new_task = todo.ToDo("Bad Date", "12-01-2025", th.PRIORITYDICT["2"], "Other", [], 1)
-    assert new_task.dueDate is None
+    with pytest.raises(ValueError):
+        todo.ToDo("Bad Date", "12-01-2025", th.PRIORITYDICT["2"], "Other", [], 1)
 
 
 # -----------------------------------
@@ -141,7 +142,7 @@ def test_search_by_keyword_failure_no_match(load_mock_tasks):
 
 
 ## -----------------------------------
-## 3. Use Case: Mark Task as Complete/Incomplete
+## Mark Task as Complete/Incomplete
 ## -----------------------------------
 
 
@@ -190,10 +191,13 @@ def test_save_data_success(load_mock_tasks, tmp_path):
     tasks_handle_mock = mock_open().return_value
     settings_handle_mock = mock_open().return_value
 
+    tasksPath = os.path.join("CTMA", "tasks.json")
+    settingsPath = os.path.join("CTMA", "settings.json")
+
     def mock_open_side_effect(file_path, mode):
-        if file_path == r"CTMA\tasks.json":
+        if file_path == tasksPath:
             return tasks_handle_mock
-        elif file_path == r"CTMA\settings.json":
+        elif file_path == settingsPath:
             return settings_handle_mock
         raise FileNotFoundError(f"File not found: {file_path}")
 
@@ -202,8 +206,8 @@ def test_save_data_success(load_mock_tasks, tmp_path):
     ) as mock_open_func:
         th.saveData()
 
-    mock_open_func.assert_any_call(r"CTMA\tasks.json", "w")
-    mock_open_func.assert_any_call(r"CTMA\settings.json", "w")
+    mock_open_func.assert_any_call(tasksPath, "w")
+    mock_open_func.assert_any_call(settingsPath, "w")
 
     written_data_chunks = [
         call[0][0] for call in tasks_handle_mock.write.call_args_list
@@ -250,10 +254,13 @@ def test_load_data_success(tmp_path):
     tasks_file_mock = mock_open(read_data=mock_task_content)
     settings_file_mock = mock_open(read_data=mock_settings_content)
 
+    tasksPath = os.path.join("CTMA", "tasks.json")
+    settingsPath = os.path.join("CTMA", "settings.json")
+
     def mock_open_side_effect(file_path, mode):
-        if file_path == r"CTMA\tasks.json":
+        if file_path == tasksPath:
             return tasks_file_mock()
-        elif file_path == r"CTMA\settings.json":
+        elif file_path == settingsPath:
             return settings_file_mock()
         raise FileNotFoundError
 
@@ -325,16 +332,16 @@ def test_edit_label_success(sample_task):
     assert sample_task.label == "Submit Quarterly Report"
 
 
-def test_edit_label_success_empty_string(sample_task):
+def test_edit_label_failure_empty_string(sample_task):
     """
-    Verifies the task's label attribute can be changed to an empty string (allowed by ToDo logic).
+    Verifies the task's label attribute cannot be changed to an empty string.
 
     Use Case: User attempts to clear the label.
     Inputs: New Value: ""
-    Expected Output: label attribute is updated to "".
+    Expected Output: ValueError is raised.
     """
-    sample_task.editLabel("")
-    assert sample_task.label == ""
+    with pytest.raises(ValueError):
+        sample_task.editLabel("")
 
 
 # -----------------------------------
