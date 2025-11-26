@@ -113,7 +113,6 @@ def loadSave():
         pass  # Settings optional
     except json.JSONDecodeError as e:
         raise ValueError(f"Critical Error: Corrupt settings file. {e}")
-    print("E")
 
 
 def saveData():
@@ -156,7 +155,6 @@ def saveData():
             json.dump(settingsDict, f, indent=4)
     except Exception as e:
         raise OSError(f"Critical Save Error: Failed to save {settingsPath}: {e}")
-    print("E")  # what is this for?
 
 
 def search(term):
