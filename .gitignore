@@ -5,3 +5,9 @@ CTMA/demogui.py
 CTMA/gui2.py
 CTMA/settings.json
 CTMA/tasks.json
+CTMA/__pycache__/
+CTMA/.venv/
+CTMA/.pytest_cache/
+CTMA/notes.txt
+CTMA/data.json
+.DS_Store
