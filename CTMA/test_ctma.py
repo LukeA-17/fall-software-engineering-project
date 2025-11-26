@@ -191,8 +191,8 @@ def test_save_data_success(load_mock_tasks, tmp_path):
     tasks_handle_mock = mock_open().return_value
     settings_handle_mock = mock_open().return_value
 
-    tasksPath = os.path.join("CTMA", "tasks.json")
-    settingsPath = os.path.join("CTMA", "settings.json")
+    tasksPath = os.path.join(th.BASE_DIR, "tasks.json")
+    settingsPath = os.path.join(th.BASE_DIR, "settings.json")
 
     def mock_open_side_effect(file_path, mode):
         if file_path == tasksPath:
@@ -254,8 +254,8 @@ def test_load_data_success(tmp_path):
     tasks_file_mock = mock_open(read_data=mock_task_content)
     settings_file_mock = mock_open(read_data=mock_settings_content)
 
-    tasksPath = os.path.join("CTMA", "tasks.json")
-    settingsPath = os.path.join("CTMA", "settings.json")
+    tasksPath = os.path.join(th.BASE_DIR, "tasks.json")
+    settingsPath = os.path.join(th.BASE_DIR, "settings.json")
 
     def mock_open_side_effect(file_path, mode):
         if file_path == tasksPath:

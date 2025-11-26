@@ -23,11 +23,14 @@ from datetime import date
 # constants
 PRIORITYDICT = {"1": "None", "2": "Low", "3": "Medium", "4": "High"}
 
+# get the absolute path of the directory this file is in
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 # runtime vars
 todoList = []  # stores todo objects during runtime
 curTheme = "Dark"
 
-fileDict = {"Default": os.path.join("CTMA", "tasks.json")}
+fileDict = {"Default": os.path.join(BASE_DIR, "tasks.json")}
 curFile = fileDict["Default"]
 
 copiedTask: todo.ToDo = None
@@ -52,7 +55,7 @@ def loadSave():
     todoList = []
 
     if not fileDict:
-        fileDict = {"Default": os.path.join("CTMA", "tasks.json")}
+        fileDict = {"Default": os.path.join(BASE_DIR, "tasks.json")}
         curFile = fileDict["Default"]
 
     try:
@@ -90,7 +93,7 @@ def loadSave():
                 raise ValueError(f"Critical Load Error in Task #{i + 1}: {e}")
 
     # Load data from settings
-    settingsPath = os.path.join("CTMA", "settings.json")
+    settingsPath = os.path.join(BASE_DIR, "settings.json")
     try:
         with open(settingsPath, "r") as f:
             data = json.load(f)
@@ -120,12 +123,6 @@ def saveData():
     Raises:
         OSError: If saving to disk fails.
     """
-    # make sure CMTA directory exists before writing to it
-    if not os.path.exists("CTMA"):
-        try:
-            os.makedirs("CTMA", exist_ok=True)
-        except OSError as e:
-            raise OSError(f"Critical Error: Could not create directory 'CTMA': {e}")
 
     # Save task list
     todoDict = {}
@@ -153,7 +150,7 @@ def saveData():
 
     settingsDict = {"theme": curTheme, "files": fileDict}
 
-    settingsPath = os.path.join("CTMA", "settings.json")
+    settingsPath = os.path.join(BASE_DIR, "settings.json")
     try:
         with open(settingsPath, "w") as f:
             json.dump(settingsDict, f, indent=4)
