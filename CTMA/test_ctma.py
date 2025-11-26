@@ -28,7 +28,9 @@ def cleanup_handler_list():
 def sample_task():
     """Helper fixture to create a standard ToDo object for core method tests."""
     # Priority key "2" maps to "Low"
-    return todo.ToDo("Milestone Review", "09/29/2025", PRIORITYDICT["2"], "Work", 1)
+    return todo.ToDo(
+        "Milestone Review", "09/29/2025", PRIORITYDICT["2"], "Work", ["John", "Jane"], 1
+    )
 
 
 @pytest.fixture
@@ -40,18 +42,21 @@ def load_mock_tasks():
             "dueDate": "10/10/2025",
             "priority": "4",
             "category": "School",
+            "people": ["Group A"],
         },
         "1": {
             "label": "Pack for Austin",
             "dueDate": "10/15/2025",
             "priority": "3",
             "category": "Personal",
+            "people": [],
         },
         "2": {
             "label": "Write Quarterly Report",
             "dueDate": "11/20/2025",
             "priority": "4",
             "category": "Work",
+            "people": ["Adam"],
         },
     }
 
@@ -62,6 +67,7 @@ def load_mock_tasks():
             data["dueDate"],
             th.PRIORITYDICT[data["priority"]],
             data["category"],
+            data["people"],
             idNum,
         )
         th.todoList.append(new_task)
@@ -83,7 +89,7 @@ def test_handler_create_task_success(load_mock_tasks):
     """
     initial_len = len(th.todoList)
     new_task = todo.ToDo(
-        "New Task", "12/01/2025", th.PRIORITYDICT["2"], "Other", initial_len + 1
+        "New Task", "12/01/2025", th.PRIORITYDICT["2"], "Other", [], initial_len + 1
     )
     th.todoList.append(new_task)
 
@@ -99,7 +105,7 @@ def test_handler_create_task_failure_invalid_date():
     Inputs: Due Date: "12-01-2025" (invalid format)
     Expected Output: dueDate attribute is None.
     """
-    new_task = todo.ToDo("Bad Date", "12-01-2025", th.PRIORITYDICT["2"], "Other", 1)
+    new_task = todo.ToDo("Bad Date", "12-01-2025", th.PRIORITYDICT["2"], "Other", [], 1)
     assert new_task.dueDate is None
 
 
@@ -417,6 +423,7 @@ def test_edit_task_category_handler_success(load_mock_tasks):
         "10/15/2025",
         "3",  # Keep existing priority
         "Trip Planning",
+        [],
     )
 
     assert success is True
@@ -431,7 +438,7 @@ def test_edit_task_attribute_failure_invalid_id(load_mock_tasks):
     Inputs: Task ID: 999.
     Expected Output: update_task_attributes returns False.
     """
-    success = th.update_task_attributes(999, "Fail", "", "1", "Fail")
+    success = th.update_task_attributes(999, "Fail", "", "1", "Fail", [])
 
     assert success is False
     assert len(th.todoList) == 3
