@@ -33,7 +33,7 @@ curTheme = "Dark"
 fileDict = {"Default": os.path.join(BASE_DIR, "tasks.json")}
 curFile = fileDict["Default"]
 
-copiedTask: todo.ToDo = None
+copiedTask: todo.ToDo | None = None
 
 
 ####################

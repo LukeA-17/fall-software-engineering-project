@@ -58,13 +58,13 @@ def set_styles(master, theme):
     themeMap = {
         "UVU": ("#4C721D", "#061F00"),
         "Dark": ("#000000", "#000000"),
-        "Light": ("#FFFFFF", "#3C2BD4")
+        "Light": ("#FFFFFF", "#3C2BD4"),
     }
 
     bg, fg = themeMap[theme]
 
     style.configure("TFrame", background=bg)
-    style.configure(".", foreground = fg)
+    style.configure(".", foreground=fg)
 
     # Make all relevant widget backgrounds white
     style.configure("TLabel", background="white")
@@ -107,7 +107,7 @@ class CTMAGUI:
         """
         self.master = master
         master.title("CTMA - Collaborative ToDo Manager")
-        
+
         # Set a default window size
         master.geometry("600x600")
 
@@ -182,7 +182,7 @@ class CTMAGUI:
                 relief="solid",
                 borderwidth=1,
                 padding=5,
-                anchor="center" # Center text inside label
+                anchor="center",  # Center text inside label
             )
             # Pack it to fill available space between left and right buttons
             lbl.pack(side="left", expand=True, padx=20)
@@ -208,10 +208,7 @@ class CTMAGUI:
 
         # settings button
         ttk.Button(
-            bottom_frame,
-            text="⚙",
-            command=self.load_settings_page,
-            width=3
+            bottom_frame, text="⚙", command=self.load_settings_page, width=3
         ).pack(side="left", anchor="sw")
 
         # exit CTMA button
@@ -420,7 +417,7 @@ class CTMAGUI:
             text="Paste Task",
             command=lambda: self.paste_task(),
             style="HomePage.TButton",
-        ).grid(row=0, column=0, padx=10, ipadx=20, pady = 20, sticky='ew')
+        ).grid(row=0, column=0, padx=10, ipadx=20, pady=20, sticky="ew")
 
         # Save Button
         ttk.Button(
@@ -428,15 +425,15 @@ class CTMAGUI:
             text="Save",
             command=self._submit_new_task_creation,
             style="HomePage.TButton",
-        ).grid(row=1, column=0, padx=10, ipadx=20, sticky='ew')
-        
+        ).grid(row=1, column=0, padx=10, ipadx=20, sticky="ew")
+
         # Discard Button
         ttk.Button(
             button_frame,
             text="Discard",
             command=self.load_home_page,
             style="HomePage.TButton",
-        ).grid(row=1, column=1, padx=10, ipadx=20, sticky='ew')
+        ).grid(row=1, column=1, padx=10, ipadx=20, sticky="ew")
 
         self.create_bottom_bar(self.main_frame)
 
@@ -466,7 +463,9 @@ class CTMAGUI:
 
         # pre-fill form variables
         date_str = task.dueDate.strftime("%m/%d/%Y") if task.dueDate else ""
-        people_str = ", ".join(task.people) if task.people else "" # Convert list to string for display
+        people_str = (
+            ", ".join(task.people) if task.people else ""
+        )  # Convert list to string for display
 
         self.current_task_vars = {
             "label": tk.StringVar(value=task.label),
@@ -482,7 +481,7 @@ class CTMAGUI:
         ttk.Button(
             form_frame,
             text="Copy Task",
-            command=lambda:self.copy_task(task),
+            command=lambda: self.copy_task(task),
             style="HomePage.TButton",
         ).grid(row=6, column=0, pady=(10, 5), sticky="w")
 
@@ -509,167 +508,161 @@ class CTMAGUI:
         ).grid(row=0, column=1, padx=10, ipadx=20)
 
         self.create_bottom_bar(self.main_frame)
-    
+
     def load_settings_page(self):
-            """
-            Loads the Settings Page
-            """
-            ##### Initial construction #####
-            self.clear_frame()
-            self.create_top_bar(self.main_frame, page_title="Settings")
+        """
+        Loads the Settings Page
+        """
+        ##### Initial construction #####
+        self.clear_frame()
+        self.create_top_bar(self.main_frame, page_title="Settings")
 
-            settings_frame = ttk.Frame(self.main_frame)
+        settings_frame = ttk.Frame(self.main_frame)
 
-            ##### Theme Section #####
-            # Theme Selection Label
-            ttk.Label(
-                settings_frame,
-                text="Theme Selection:",
-                font=("Arial", 11, "bold")
-            ).pack(anchor="w", pady=(0, 5))
+        ##### Theme Section #####
+        # Theme Selection Label
+        ttk.Label(
+            settings_frame, text="Theme Selection:", font=("Arial", 11, "bold")
+        ).pack(anchor="w", pady=(0, 5))
 
-            # Theme Combobox
-            self.selected_theme = tk.StringVar()
+        # Theme Combobox
+        self.selected_theme = tk.StringVar()
 
-            themeCombo = ttk.Combobox(
-                settings_frame,
-                textvariable=self.selected_theme,
-                values=["UVU", "Dark", "Light"],
-                state="readonly"
-            )
-            
-            themeCombo.pack(anchor="w", pady=(0, 10), fill="x")
-            self.selected_theme.set(th.curTheme)
+        themeCombo = ttk.Combobox(
+            settings_frame,
+            textvariable=self.selected_theme,
+            values=["UVU", "Dark", "Light"],
+            state="readonly",
+        )
 
-            ##### Profile Management #####
-            # Profile Label
-            ttk.Label(
-                settings_frame,
-                text="Profiles:",
-                font=("Arial", 11, "bold")
-            ).pack(anchor="w", pady=(10, 5))
+        themeCombo.pack(anchor="w", pady=(0, 10), fill="x")
+        self.selected_theme.set(th.curTheme)
 
-            # Profile Combobox
-            self.selected_profile = tk.StringVar()
+        ##### Profile Management #####
+        # Profile Label
+        ttk.Label(settings_frame, text="Profiles:", font=("Arial", 11, "bold")).pack(
+            anchor="w", pady=(10, 5)
+        )
 
-            profileCombo = ttk.Combobox(
-                settings_frame,
-                textvariable=self.selected_profile,
-                values=list(th.fileDict.keys()),
-                state="readonly"
-            )
-            profileCombo.pack(anchor="w", pady=(0, 5), fill="x")
-            self.selected_profile.set("Default")
+        # Profile Combobox
+        self.selected_profile = tk.StringVar()
 
-            # Profile Logic Functions 
-            def add_profile_logic():
-                # Select File Path
-                file_path = filedialog.askopenfilename(title="Select Profile File")
+        profileCombo = ttk.Combobox(
+            settings_frame,
+            textvariable=self.selected_profile,
+            values=list(th.fileDict.keys()),
+            state="readonly",
+        )
+        profileCombo.pack(anchor="w", pady=(0, 5), fill="x")
+        self.selected_profile.set("Default")
 
-                if not file_path:
-                    return
-                if not file_path.lower().endswith(".json"):
-                                messagebox.showerror("Invalid File", "Please select a valid .json file.")
-                                return
+        # Profile Logic Functions
+        def add_profile_logic():
+            # Select File Path
+            file_path = filedialog.askopenfilename(title="Select Profile File")
 
-                # Name Profile
-                profile_name = simpledialog.askstring(
-                    "Profile Name", 
-                    "Enter a name for this profile:"
+            if not file_path:
+                return
+            if not file_path.lower().endswith(".json"):
+                messagebox.showerror(
+                    "Invalid File", "Please select a valid .json file."
                 )
+                return
 
-                if profile_name:
-                    if profile_name in th.fileDict:
-                        messagebox.showwarning("Error", "A profile with this name already exists.")
-                        return
-                    
-                    # Save to backend and update UI
-                    th.fileDict[profile_name] = file_path
-                    profileCombo['values'] = list(th.fileDict.keys())
-                    self.selected_profile.set(profile_name)
-                    messagebox.showinfo("Success", f"Profile '{profile_name}' added.")
+            # Name Profile
+            profile_name = simpledialog.askstring(
+                "Profile Name", "Enter a name for this profile:"
+            )
 
-            def delete_profile_logic():
-                target = self.selected_profile.get()
-                if not target:
-                    messagebox.showwarning("Selection Error", "Please select a profile to delete.")
+            if profile_name:
+                if profile_name in th.fileDict:
+                    messagebox.showwarning(
+                        "Error", "A profile with this name already exists."
+                    )
                     return
 
-                confirm = messagebox.askyesno(
-                    "Confirm Delete", 
-                    f"Are you sure you want to delete profile '{target}'?"
+                # Save to backend and update UI
+                th.fileDict[profile_name] = file_path
+                profileCombo["values"] = list(th.fileDict.keys())
+                self.selected_profile.set(profile_name)
+                messagebox.showinfo("Success", f"Profile '{profile_name}' added.")
+
+        def delete_profile_logic():
+            target = self.selected_profile.get()
+            if not target:
+                messagebox.showwarning(
+                    "Selection Error", "Please select a profile to delete."
                 )
-                
-                if confirm:
-                    if target == "Default":
-                        messagebox.showinfo("Error", "You may not remove the default profile.")
-                        return
-                    
-                    del th.fileDict[target]
-                    profileCombo['values'] = list(th.fileDict.keys())
-                    self.selected_profile.set("") # Clear selection
-                    messagebox.showinfo("Deleted", "Profile deleted successfully.")
-                    self.load_home_page()
+                return
 
-            def apply_profile_logic():
-                target = self.selected_profile.get()
-                if not target: return
-                try:
-                    th.changeProfile(target)
-                    messagebox.showinfo("Success", f"Profile switched to {target}")
-                    self.load_home_page()
-                except ValueError as e:
-                    messagebox.showerror("Error", str(e))
+            confirm = messagebox.askyesno(
+                "Confirm Delete", f"Are you sure you want to delete profile '{target}'?"
+            )
 
-            # Profile Buttons Frame
-            # Create a sub-frame to hold the three buttons side-by-side
-            btn_frame = ttk.Frame(settings_frame)
-            btn_frame.pack(fill="x", pady=(0, 5))
+            if confirm:
+                if target == "Default":
+                    messagebox.showinfo(
+                        "Error", "You may not remove the default profile."
+                    )
+                    return
 
-            # Add Profile Button
-            ttk.Button(
-                btn_frame,
-                text="Add Profile",
-                command=add_profile_logic
-            ).pack(side="left", expand=True, fill="x", padx=(0, 5))
+                del th.fileDict[target]
+                profileCombo["values"] = list(th.fileDict.keys())
+                self.selected_profile.set("")  # Clear selection
+                messagebox.showinfo("Deleted", "Profile deleted successfully.")
+                self.load_home_page()
 
-            # Delete Profile Button
-            ttk.Button(
-                btn_frame,
-                text="Delete Profile",
-                command=delete_profile_logic
-            ).pack(side="left", expand=True, fill="x", padx=(0, 5))
+        def apply_profile_logic():
+            target = self.selected_profile.get()
+            if not target:
+                return
+            try:
+                th.changeProfile(target)
+                messagebox.showinfo("Success", f"Profile switched to {target}")
+                self.load_home_page()
+            except ValueError as e:
+                messagebox.showerror("Error", str(e))
 
-            # Apply Profile Button
-            ttk.Button(
-                btn_frame,
-                text="Apply Profile",
-                command=apply_profile_logic
-            ).pack(side="left", expand=True, fill="x", padx=(0, 0))
+        # Profile Buttons Frame
+        # Create a sub-frame to hold the three buttons side-by-side
+        btn_frame = ttk.Frame(settings_frame)
+        btn_frame.pack(fill="x", pady=(0, 5))
 
-            ##### Save Settings Logic #####
-            def on_save():
-                new_theme = self.selected_theme.get()
-                
-                # Save theme
-                th.curTheme = new_theme
-                set_styles(self.master, new_theme)
-                                
-                messagebox.showinfo("Info Alert", "Settings Saved Successfully!")
+        # Add Profile Button
+        ttk.Button(btn_frame, text="Add Profile", command=add_profile_logic).pack(
+            side="left", expand=True, fill="x", padx=(0, 5)
+        )
 
-            ##### Main Save Button #####
-            ttk.Button(
-                settings_frame,
-                text="Save Settings",
-                command=on_save
-            ).pack(pady=(10, 0), fill="x")
+        # Delete Profile Button
+        ttk.Button(btn_frame, text="Delete Profile", command=delete_profile_logic).pack(
+            side="left", expand=True, fill="x", padx=(0, 5)
+        )
 
-            ##### Bottom bar #####
-            self.create_bottom_bar(self.main_frame)
+        # Apply Profile Button
+        ttk.Button(btn_frame, text="Apply Profile", command=apply_profile_logic).pack(
+            side="left", expand=True, fill="x", padx=(0, 0)
+        )
 
-            ##### Render Frame #####
-            settings_frame.pack(fill="x", padx=50)
+        ##### Save Settings Logic #####
+        def on_save():
+            new_theme = self.selected_theme.get()
 
+            # Save theme
+            th.curTheme = new_theme
+            set_styles(self.master, new_theme)
+
+            messagebox.showinfo("Info Alert", "Settings Saved Successfully!")
+
+        ##### Main Save Button #####
+        ttk.Button(settings_frame, text="Save Settings", command=on_save).pack(
+            pady=(10, 0), fill="x"
+        )
+
+        ##### Bottom bar #####
+        self.create_bottom_bar(self.main_frame)
+
+        ##### Render Frame #####
+        settings_frame.pack(fill="x", padx=50)
 
     # =========================================
     # Task List Display
@@ -798,9 +791,12 @@ class CTMAGUI:
         self._create_form_row(
             parent_frame, "Category:", 3, self.current_task_vars["category"]
         )
-        
+
         self._create_form_row(
-            parent_frame, "People Involved (comma separated):", 4, self.current_task_vars["people"]
+            parent_frame,
+            "People Involved (comma separated):",
+            4,
+            self.current_task_vars["people"],
         )
 
         priority_options = list(th.PRIORITYDICT.values())
@@ -846,24 +842,25 @@ class CTMAGUI:
         try:
             idNum = len(th.todoList) + 1
             new_task = th.todo.ToDo(
-                data["label"], 
-                data["dueDate"], 
-                data["priority"], 
+                data["label"],
+                data["dueDate"],
+                data["priority"],
                 data["category"],
-                people_list, # Pass people list
-                idNum
+                people_list,  # Pass people list
+                idNum,
             )
-            
+
             # If no exception was raised, the task is valid
             th.todoList.append(new_task)
-            messagebox.showinfo("Success", f"Task '{data['label']}' created successfully!")
+            messagebox.showinfo(
+                "Success", f"Task '{data['label']}' created successfully!"
+            )
             self.load_home_page()
-            
+
         except (ValueError, TypeError) as e:
             # Catch the error message from validateAttributes and show a popup
             messagebox.showerror("Validation Error", str(e))
             return
-
 
     def _submit_task_update(self):
         """
@@ -881,17 +878,19 @@ class CTMAGUI:
             )
 
             th.update_task_attributes(
-                task.idNum, 
-                data["label"], 
-                data["dueDate"], 
-                priority_key, 
+                task.idNum,
+                data["label"],
+                data["dueDate"],
+                priority_key,
                 data["category"],
-                people_list # Pass people list
+                people_list,  # Pass people list
             )
 
-            messagebox.showinfo("Success", f"Task '{data['label']}' updated successfully!")
+            messagebox.showinfo(
+                "Success", f"Task '{data['label']}' updated successfully!"
+            )
             self.load_task_view_page(self.current_view_type, self.current_category)
-            
+
         except (ValueError, TypeError) as e:
             # Catch the error and show the user the specific problem
             messagebox.showerror("Validation Error", str(e))
@@ -923,7 +922,7 @@ class CTMAGUI:
 
             messagebox.showinfo("Deleted", f"Task '{task.label}' has been deleted.")
             self.load_home_page()
-    
+
     def copy_task(self, task):
         th.copyTask(task)
         messagebox.showinfo("Info Alert", f"{task.label} copied")
@@ -935,16 +934,18 @@ class CTMAGUI:
             messagebox.showinfo("Paste Error", "No task has been copied yet.")
             return
 
-        date_str = copied_task.dueDate
+        date_str = (
+            copied_task.dueDate.strftime("%m/%d/%Y") if copied_task.dueDate else ""
+        )
         # Added handling for people list paste
         people_str = ", ".join(copied_task.people) if copied_task.people else ""
 
         self.current_task_vars["label"].set(f"COPY: {copied_task.label}")
         self.current_task_vars["dueDate"].set(date_str)
-        self.current_task_vars["priority"].set(copied_task.priority) 
+        self.current_task_vars["priority"].set(copied_task.priority)
         self.current_task_vars["category"].set(copied_task.category)
         self.current_task_vars["people"].set(people_str)
-        
+
         messagebox.showinfo("Success", f"Task data copied from '{copied_task.label}'.")
 
     # =========================================
@@ -973,7 +974,7 @@ class CTMAGUI:
             th.saveData()
         except OSError as e:
             messagebox.showerror("Save Error", f"Could not save data: {e}")
-            
+
         self.master.destroy()
         print("\nThank you for using CTMA!")
 
