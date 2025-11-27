@@ -50,7 +50,41 @@ When you are done using the program, enter 0 into the main menu to save and clos
 ![CTMA Closure](https://github.com/LukeA-17/fall-software-engineering-project/blob/main/Documentation/Images/readme/exit_CTMA.png?raw=true)
 
 ## 4. GUI Usage Guide
-To be updated
+### Home Dashboard
+This is the screen you are presented with upon launch.
+
+* **Top Bar:** Displays the current date, the **Add Task** button, and the **Home** button. The home button will return you to this screen at any time.
+* **Main Views:** Buttons to quickly filter tasks by "Due Today", "All" or "Completed".
+* **Category Views:** Automatically generates buttons for every unique category (e.g., "School", "Work") found in your task list.
+* **Bottom Bar:** Contains the **Settings** button and the **Exit CTMA** button.
+
+### Creating and Editing Tasks
+#### To Create a Task:
+1. Click **Add Task** in the top right corner.
+2. Fill in the **Label**, **Due Date** (MM/DD/YYYY), **Category**, and **People Involved**.
+3. Select a **Priority** (None, Low, Medium, High) from the dropdown.
+4. Click **Save** to commit the task or **Paste Task** to fill fields from a copied task.
+
+#### To Edit a Task:
+1. In the Task View, click the "..." button next to a task.
+2. Update the desired fields.
+3. You may also **Copy Task** to the clipboard or **Delete Task** from this menu.
+
+### Viewing Tasks
+* **Sorting:** Use the dropdown menu at the top to sort by **Priority**, **Due Date**, or **Label**.
+* **Color Coding:** Tasks are color-coded by priority:
+    * **Red:** High Priority
+    * **Orange:** Medium Priority
+    * **Yellow:** Low Priority
+    * **Gray:** No Priority
+* **Completion:** Click the checkbox on the left of a task to toggle it between Complete and Ongoing.
+* **Past Due:** Tasks with due dates before the current day are marked as "Past Due".
+
+### Settings
+Click the **Gear** icon on the home page to access settings.
+* **Theme Selection:** Choose between different visual themes.
+* **Profile Management:** Switch between different save files (profiles), add new profiles, or delete existing ones.
+
 
 
 ## 5. GitHub Issues Fixes
