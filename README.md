@@ -139,9 +139,8 @@ Click the **Gear** icon on the home page to access settings.
 ### 12. 🟢 [How many test cases do you have?](https://github.com/LukeA-17/fall-software-engineering-project/issues/12)
 - Addressed in commit [f6ab7e0](https://github.com/LukeA-17/fall-software-engineering-project/commit/f6ab7e0163bb3d6ceb6d6a1dd05cbfc678129f53)
 
-### 13. 🟡 [Incomplete README file](https://github.com/LukeA-17/fall-software-engineering-project/issues/13)
-- Initially addressed in commits [feefc35](https://github.com/LukeA-17/fall-software-engineering-project/commit/feefc35a2dd2a885a128f64f8bd5adf242e46c91), [6bc2b02](https://github.com/LukeA-17/fall-software-engineering-project/commit/6bc2b02cc055311d6e23e9a003de698b6b5bc823), and [3beb20e](https://github.com/LukeA-17/fall-software-engineering-project/commit/3beb20e76be3840e46e6b7bd4e8f26d84c652275)
-- Additional milestone reqs and comprehensiveness in progress
+### 13. 🟢 [Incomplete README file](https://github.com/LukeA-17/fall-software-engineering-project/issues/13)
+- Addressed in commits [feefc35](https://github.com/LukeA-17/fall-software-engineering-project/commit/feefc35a2dd2a885a128f64f8bd5adf242e46c91), [6bc2b02](https://github.com/LukeA-17/fall-software-engineering-project/commit/6bc2b02cc055311d6e23e9a003de698b6b5bc823), and [3beb20e](https://github.com/LukeA-17/fall-software-engineering-project/commit/3beb20e76be3840e46e6b7bd4e8f26d84c652275)
 
 ### 14. 🟢 [Missing file input loading option](https://github.com/LukeA-17/fall-software-engineering-project/issues/14)
 - Addressed in commit [6bc2b02](https://github.com/LukeA-17/fall-software-engineering-project/commit/6bc2b02cc055311d6e23e9a003de698b6b5bc823) by adding a description of file storage to the README
@@ -152,14 +151,14 @@ Click the **Gear** icon on the home page to access settings.
 ### 16. 🟡 [Commits](https://github.com/LukeA-17/fall-software-engineering-project/issues/16)
 - In progress
 
-### 17. 🟡 [No Class Diagram](https://github.com/LukeA-17/fall-software-engineering-project/issues/17)
-- In progress
+### 17. 🟢 [No Class Diagram](https://github.com/LukeA-17/fall-software-engineering-project/issues/17)
+- Addressed in commit [4e56ed6](https://github.com/LukeA-17/fall-software-engineering-project/commit/4e56ed6eb47a11367403479baf454b9672524508)
 
-### 18. 🟡 [No Use Case Diagram](https://github.com/LukeA-17/fall-software-engineering-project/issues/18)
-- In progress
+### 18. 🟢 [No Use Case Diagram](https://github.com/LukeA-17/fall-software-engineering-project/issues/18)
+- Addressed in commit [202fdb5](https://github.com/LukeA-17/fall-software-engineering-project/commit/202fdb51407d11e1fa6586fc45adab84b0bd564d)
 
-### 19. 🟡 [CLI usage example in README; GUI screenshots?](https://github.com/LukeA-17/fall-software-engineering-project/issues/19)
-- In progress
+### 19. 🟢 [CLI usage example in README; GUI screenshots?](https://github.com/LukeA-17/fall-software-engineering-project/issues/19)
+- Addressed in commit [59692c5](https://github.com/LukeA-17/fall-software-engineering-project/commit/59692c582f2babe1b42d160ac23cf1270f1f5dcb)
 
 ### 20. 🟡 [Issues from Milestone 2 some not closed](https://github.com/LukeA-17/fall-software-engineering-project/issues/20)
 - In progress
