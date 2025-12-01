@@ -5,19 +5,22 @@ CTMA is the hottest up and coming ToDo manager out there! Keep track of every ta
 1. [Features](#1-features)
 2. [Setup](#2-setup)
 3. [Command Line Usage Guide](#3-command-line-usage-guide)
-4. [GUI Usage Guide](#3-gui-usage-guide)
+4. [GUI Usage Guide](#4-gui-usage-guide)
 5. [GitHub Issues Fixes](#5-github-issues-fixes)
 
 ## 1. Features
 - Manage todos from multiple projects
 - Add, edit, and mark tasks as complete
-- Persistent data storage between sessions
 - Simple command-line interface
+- Intuitive graphical user interface
+- Multi-profile support
+- Customizable themes
+- Auto-saves settings and tasks on exit
 
 **File Storage Functionality**
-- Saved list of ToDo tasks are stored in data.json
-- data.json is located in the same folder as main.py
-- If data.json does not exist on startup, the program adds it to the directory
+- settings.json: Stores your theme preference and a list of profiles.
+- tasks.json: The default profile file where tasks are stored.
+- Custom profiles: You may create additional `.json` files anywhere on your computer and link them via the Settings menu
 
 ## 2. Setup
 **Requires Python 3.10 or higher**
@@ -51,6 +54,8 @@ When you are done using the program, enter 0 into the main menu to save and clos
 
 ## 4. GUI Usage Guide
 ### Home Dashboard
+![Home Page](https://github.com/LukeA-17/fall-software-engineering-project/blob/main/Documentation/Images/readme/home_page.png?raw=true)
+
 This is the screen you are presented with upon launch.
 
 * **Top Bar:** Displays the current date, the **Add Task** button, and the **Home** button. The home button will return you to this screen at any time.
@@ -60,17 +65,23 @@ This is the screen you are presented with upon launch.
 
 ### Creating and Editing Tasks
 #### To Create a Task:
+![Create Page](https://github.com/LukeA-17/fall-software-engineering-project/blob/main/Documentation/Images/readme/create_page.png?raw=true)
+
 1. Click **Add Task** in the top right corner.
 2. Fill in the **Label**, **Due Date** (MM/DD/YYYY), **Category**, and **People Involved**.
 3. Select a **Priority** (None, Low, Medium, High) from the dropdown.
 4. Click **Save** to commit the task or **Paste Task** to fill fields from a copied task.
 
 #### To Edit a Task:
+![Edit Page](https://github.com/LukeA-17/fall-software-engineering-project/blob/main/Documentation/Images/readme/edit_page.png?raw=true)
+
 1. In the Task View, click the "..." button next to a task.
 2. Update the desired fields.
 3. You may also **Copy Task** to the clipboard or **Delete Task** from this menu.
 
 ### Viewing Tasks
+![View Page](https://github.com/LukeA-17/fall-software-engineering-project/blob/main/Documentation/Images/readme/view_page.png?raw=true)
+
 * **Sorting:** Use the dropdown menu at the top to sort by **Priority**, **Due Date**, or **Label**.
 * **Color Coding:** Tasks are color-coded by priority:
     * **Red:** High Priority
@@ -81,6 +92,8 @@ This is the screen you are presented with upon launch.
 * **Past Due:** Tasks with due dates before the current day are marked as "Past Due".
 
 ### Settings
+![Settings Page](https://github.com/LukeA-17/fall-software-engineering-project/blob/main/Documentation/Images/readme/settings_page.png?raw=true)
+
 Click the **Gear** icon on the home page to access settings.
 * **Theme Selection:** Choose between different visual themes.
 * **Profile Management:** Switch between different save files (profiles), add new profiles, or delete existing ones.
