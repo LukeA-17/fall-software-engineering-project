@@ -53,38 +53,65 @@ def set_styles(master, theme):
         theme: The desired color scheme
     """
     style = ttk.Style(master)
+    # line needed to override some OS's using their own style
+    style.theme_use("clam")
 
     # Theme Name, background color, foreground color
     themeMap = {
         "UVU": ("#4C721D", "#061F00"),
-        "Dark": ("#000000", "#000000"),
+        "Dark": ("#000000", "#FFFFFF"),
         "Light": ("#FFFFFF", "#3C2BD4"),
     }
 
-    bg, fg = themeMap[theme]
+    bg, fg = themeMap.get(theme, themeMap["UVU"])
 
     style.configure("TFrame", background=bg)
     style.configure(".", foreground=fg)
 
-    # Make all relevant widget backgrounds white
-    style.configure("TLabel", background="white")
-    style.configure("TCombobox", background="white")
-    style.configure("TOptionmenu", background="white")
+    # global label style
+    style.configure("TLabel", background=bg)
+    style.configure("Settings.TLabel", background=bg, foreground=fg, font=("Arial", 25))
+
+    style.configure("TButton", foreground="black")
+    style.configure("TCombobox", foreground="black", background="white")
+    style.configure("TOptionmenu", foreground="black", background="white")
+    style.configure("TEntry", foreground="black")
 
     # define style for main view buttons on the home page
-    style.configure("HomePage.TButton", font=("Arial", 10, "bold"), padding=10)
+    style.configure(
+        "HomePage.TButton", font=("Arial", 10, "bold"), padding=10, foreground="black"
+    )
 
     # define styles for task row frames based on priority
+
+    # high
     style.configure("Task.High.TFrame", background="red", borderwidth=1, relief="solid")
+    style.configure("High.TLabel", background="red")
+    style.configure("High.TCheckbutton", background="red")
+
+    # medium
     style.configure(
         "Task.Medium.TFrame", background="orange", borderwidth=1, relief="solid"
     )
+    style.configure("Medium.TLabel", background="orange")
+    style.configure("Medium.TCheckbutton", background="orange")
+
+    # low
     style.configure(
         "Task.Low.TFrame", background="yellow", borderwidth=1, relief="solid"
     )
+    style.configure("Low.TLabel", background="yellow", foreground="black")
+    style.configure("Low.TCheckbutton", background="yellow")
+
+    # none
     style.configure(
         "Task.None.TFrame", background="lightgray", borderwidth=1, relief="solid"
     )
+    style.configure("None.TLabel", background="lightgray")
+    style.configure("None.TCheckbutton", background="lightgray")
+
+    # style for settings icon
+    style.configure("Settings.TLabel", background=bg, foreground=fg, font=("Arial", 25))
 
 
 class CTMAGUI:
@@ -165,9 +192,13 @@ class CTMAGUI:
         today = date.today().strftime("%B %d, %Y")
 
         # home button
-        ttk.Button(top_frame, text="Home", command=self.load_home_page, width=8).pack(
-            side="left", anchor="nw", padx=(0, 10)
+        home_label = ttk.Label(
+            top_frame,
+            text="⌂",
+            style="Settings.TLabel",
         )
+        home_label.pack(side="left", anchor="nw", padx=(0, 10))
+        home_label.bind("<Button-1>", lambda e: self.load_home_page())
 
         # optional page title or centered date
         if page_title:
@@ -207,9 +238,14 @@ class CTMAGUI:
         bottom_frame.pack(fill="x", side="bottom", pady=(20, 0))
 
         # settings button
-        ttk.Button(
-            bottom_frame, text="⚙", command=self.load_settings_page, width=3
-        ).pack(side="left", anchor="sw")
+        settings_label = ttk.Label(
+            bottom_frame,
+            text="⚙",
+            style="Settings.TLabel",
+            cursor="hand2",
+        )
+        settings_label.pack(side="left", anchor="sw", padx=10)
+        settings_label.bind("<Button-1>", lambda e: self.load_settings_page())
 
         # exit CTMA button
         ttk.Button(
@@ -347,8 +383,12 @@ class CTMAGUI:
         task_list_container = ttk.Frame(self.main_frame)
         task_list_container.pack(fill="both", expand=True, pady=10)
 
+        bg_color = ttk.Style().lookup("TFrame", "background")
+
         # canvas for scrolling
-        self.task_canvas = tk.Canvas(task_list_container)
+        self.task_canvas = tk.Canvas(
+            task_list_container, bg=bg_color, highlightthickness=0
+        )
         self.task_canvas.pack(side="left", fill="both", expand=True)
 
         # scrollbar for the canvas
@@ -718,17 +758,18 @@ class CTMAGUI:
             task: The ToDo object to display
         """
         # map priority string to a defined style
-        priority_style_map = {
-            "High": "Task.High.TFrame",
-            "Medium": "Task.Medium.TFrame",
-            "Low": "Task.Low.TFrame",
-            "None": "Task.None.TFrame",
-        }
+        priorityKey = (
+            task.priority
+            if task.priority in ["High", "Medium", "Low", "None"]
+            else "None"
+        )
+
+        frameStyle = f"Task.{priorityKey}.TFrame"
+        labelStyle = f"{priorityKey}.TLabel"
+        checkStyle = f"{priorityKey}.TCheckbutton"
 
         # main frame for the task row, styled by priority
-        row_frame = ttk.Frame(
-            parent, padding=10, style=priority_style_map.get(task.priority, "TFrame")
-        )
+        row_frame = ttk.Frame(parent, padding=10, style=frameStyle)
         row_frame.pack(fill="x", pady=5, padx=5)
 
         # completion checkbox and toggle logic
@@ -741,32 +782,31 @@ class CTMAGUI:
             task.toggleComplete(choice)
             self.update_task_list()  # reraw to reflect status/sorting changes
 
-        ttk.Checkbutton(row_frame, variable=status_var, command=toggle_completion).pack(
-            side="left", padx=(0, 10)
-        )
+        ttk.Checkbutton(
+            row_frame, variable=status_var, command=toggle_completion, style=checkStyle
+        ).pack(side="left", padx=(0, 10))
 
         # task label
-        ttk.Label(row_frame, text=task.label, font=("Arial", 10, "bold")).pack(
-            side="left", anchor="w"
-        )
+        ttk.Label(
+            row_frame, text=task.label, font=("Arial", 10, "bold"), style=labelStyle
+        ).pack(side="left", anchor="w")
 
         # past due indicator
         if task.dueDate and task.dueDate < date.today():
-            ttk.Label(row_frame, text="Past Due", font=("Arial", 12, "bold")).pack(
-                side="left", padx=10
-            )
+            ttk.Label(
+                row_frame, text="Past Due", font=("Arial", 12, "bold"), style=labelStyle
+            ).pack(side="left", padx=10)
 
         # due date display
         date_display = task.dueDate.strftime("%m/%d") if task.dueDate else "N/A"
-        ttk.Label(row_frame, text=date_display, font=("Arial", 10)).pack(
-            side="right", padx=(10, 5), anchor="e"
-        )
+        ttk.Label(
+            row_frame, text=date_display, font=("Arial", 10), style=labelStyle
+        ).pack(side="right", padx=(10, 5), anchor="e")
 
         # edit button
-        # NOTE placeholder command
         ttk.Button(
             row_frame,
-            text="...",
+            text="···",
             width=3,
             command=lambda t=task: self.load_edit_task_page(t),
         ).pack(side="right", anchor="e")
