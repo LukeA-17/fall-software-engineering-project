@@ -1,6 +1,8 @@
 # CTMA - Collaborative ToDo Manager Application
 CTMA is the hottest up and coming ToDo manager out there! Keep track of every task you have, including their due dates, categories, and priorities with the simplicity of a command line interface.
 
+[Team video demonstration of early CLI program](https://youtu.be/GghHmOffBkA)
+
 ## Table of Contents
 1. [Features](#1-features)
 2. [Setup](#2-setup)
