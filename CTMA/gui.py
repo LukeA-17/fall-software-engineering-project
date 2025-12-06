@@ -142,6 +142,7 @@ class CTMAGUI:
         self.current_view_type = "All"
         self.current_category = None
         self.current_sort_key = "Priority"
+        self.current_active_profile = "Default"
 
         try:
             th.loadSave()
@@ -594,7 +595,7 @@ class CTMAGUI:
             state="readonly",
         )
         profileCombo.pack(anchor="w", pady=(0, 5), fill="x")
-        self.selected_profile.set("Default")
+        self.selected_profile.set(self.current_active_profile)
 
         # Profile Logic Functions
         def add_profile_logic():
@@ -659,6 +660,7 @@ class CTMAGUI:
             try:
                 th.changeProfile(target)
                 messagebox.showinfo("Success", f"Profile switched to {target}")
+                self.current_active_profile = target
                 self.load_home_page()
             except ValueError as e:
                 messagebox.showerror("Error", str(e))
